@@ -6,9 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-/**
- * Data class para la BD Local (como AlumnoLocal.kt del profe)
- */
+
 data class AnimalLocal(
     val id: Int,
     val nombre: String,
@@ -16,9 +14,7 @@ data class AnimalLocal(
     val fotoUrl: String?
 )
 
-/**
- * Helper de SQLite (como AlumnoDbHelper.kt del profe)
- */
+
 class AnimalDbHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {

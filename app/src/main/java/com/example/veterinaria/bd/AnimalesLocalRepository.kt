@@ -5,9 +5,7 @@ import com.example.veterinaria.api.Animal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-/**
- * Repositorio de BD Local (como AlumnosLocalRepository.kt del profe)
- */
+
 object AnimalesLocalRepository {
 
     suspend fun insert(context: Context, nombre: String, fechaNac: String, fotoUrl: String?): Result<Long> =
@@ -17,7 +15,7 @@ object AnimalesLocalRepository {
             }
         }
 
-    /** Helper para insertar desde una lista de la API */
+
     suspend fun insertFromApiList(context: Context, animales: List<Animal>): Result<Unit> =
         withContext(Dispatchers.IO) {
             runCatching {

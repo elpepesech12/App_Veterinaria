@@ -29,13 +29,16 @@
         android:theme="@style/Theme.Veterinaria"
         tools:targetApi="31">
         <activity
+            android:name=".AdminMenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".VeterinarioHomeActivity"
             android:exported="false" />
         <activity
             android:name=".InsertarAnimalActivity"
             android:exported="false" />
         <activity
-            android:name=".AdminHomeActivity"
+            android:name=".ListarAnimalesActivity"
             android:exported="false" /> <!-- MainActivity (Login) es la pantalla de inicio -->
         <activity
             android:name=".MainActivity"

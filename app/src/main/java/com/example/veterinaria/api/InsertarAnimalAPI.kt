@@ -6,9 +6,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
-/**
- * Helper para insertar (como InsertarAlumnosAPI.kt del profe)
- */
 object InsertarAnimalAPI {
 
     fun insertarAnimal(

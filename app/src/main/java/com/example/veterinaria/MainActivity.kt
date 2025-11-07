@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
             if (user == adminUser && pass == adminPass) {
                 // ROL ADMIN
-                val intent = Intent(this, AdminHomeActivity::class.java)
+                val intent = Intent(this, AdminMenuActivity::class.java)
                 intent.putExtra("sesion", user)
                 startActivity(intent)
                 Toast.makeText(this, "Bienvenido Admin: $user", Toast.LENGTH_SHORT).show()
