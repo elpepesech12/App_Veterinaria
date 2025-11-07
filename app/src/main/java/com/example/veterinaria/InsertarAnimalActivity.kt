@@ -21,15 +21,24 @@ class InsertarAnimalActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_insertar_animal)
 
+
+        if (ValidarConexionWAN.isOnline(this)) {
+            // ok
+        } else {
+            val toast = Toast.makeText(this, "SIN CONEXIÓN", Toast.LENGTH_SHORT)
+            toast.show()
+        }
+
+
         //--- LÓGICA DEL PROFE: FindViewById ---
         val edNombre: EditText = findViewById(R.id.ed_animal_nombre)
         val edFechaNac: EditText = findViewById(R.id.ed_animal_fecha_nac)
         val btnInsertarApi: Button = findViewById(R.id.btn_insertar_animal_api)
         val btnInsertarLocal: Button = findViewById(R.id.btn_insertar_animal_local)
+        val btnVolver: Button = findViewById(R.id.btn_volver_menu_insertar)
         // val btnTomarFoto: Button = findViewById(R.id.btn_tomar_foto) // Ignorado por ahora
 
-        //--- LÓGICA DEL PROFE: Listeners con lógica DENTRO ---
-        // (Igual que el MainActivity4 de tu profe)
+
 
         btnInsertarApi.setOnClickListener {
             if (!ValidarConexionWAN.isOnline(this)) {
@@ -63,6 +72,10 @@ class InsertarAnimalActivity : AppCompatActivity() {
             }
         }
 
+        btnVolver.setOnClickListener {
+            finish() // Cierra esta activity y vuelve al menú
+        }
+
         btnInsertarLocal.setOnClickListener {
             // Lógica de leer formulario
             val nombre = edNombre.text.toString().trim()
@@ -78,7 +91,8 @@ class InsertarAnimalActivity : AppCompatActivity() {
                         context = this@InsertarAnimalActivity,
                         nombre = nombre,
                         fechaNac = fecha,
-                        fotoUrl = null // Ignorado por ahora
+                        fotoUrl = null, // Ignorado por ahora
+                        idArea = 1L // <-- ¡¡AÑADE ESTA LÍNEA!! (Usamos 1 como default)
                     )
                     res.onSuccess { rowId ->
                         Toast.makeText(this@InsertarAnimalActivity, "Guardado local (id=$rowId)", Toast.LENGTH_SHORT).show()

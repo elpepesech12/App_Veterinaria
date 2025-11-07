@@ -6,26 +6,23 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 
-/**
- * Lo que enviaremos a la API para insertar.
- */
+
 data class AnimalInsertRequest(
     val nombre: String,
     val fecha_nacimiento: String, // formato "YYYY-MM-DD"
-    val id_sexo: String = "I",
+    val id_sexo: String = "M",
     val id_especie: Long = 1,
     val id_habitat: Long = 1,
-    val id_estado_salud: Long = 1
+    val id_estado_salud: Long = 1,
+    val id_area: Long = 1 // <-- ¡¡AÑADIR ESTA LÍNEA!!
 )
 
-/**
- * Interfaz de Retrofit (como ApiDuocService.kt del profe)
- */
-interface SupabaseService {
 
-    @GET("animal") // "animal" es el nombre de tu tabla
+interface SupabaseService {
+    @GET("animal")
     suspend fun getAnimales(
-        @Query("select") select: String = "id_animal,nombre,fecha_nacimiento,foto_url",
+        // ¡Modificar esta línea!
+        @Query("select") select: String = "id_animal,nombre,fecha_nacimiento,foto_url,id_area",
         @Header("Range") range: String = "0-99"
     ): List<Animal>
 
