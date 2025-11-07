@@ -1,5 +1,6 @@
 package com.example.veterinaria.api
 
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -32,4 +33,22 @@ interface SupabaseService {
         @Header("Prefer") prefer: String = "return=representation"
     ): List<Animal>
 
+    /**
+     * Pide el conteo total de animales.
+     * No devuelve cuerpo (Response<Unit>), el dato está en el header.
+     */
+    @GET("animal")
+    suspend fun getTotalAnimalesCount(
+        @Header("Prefer") prefer: String = "count=exact",
+        @Header("Range") range: String = "0-0" // Solo queremos el conteo, no filas
+    ): Response<Unit>
+
+    /**
+     * Pide el conteo de animales críticos (id_estado_salud = 4)
+     */
+    @GET("animal?id_estado_salud=eq.4") // Filtro de Supabase
+    suspend fun getCriticosAnimalesCount(
+        @Header("Prefer") prefer: String = "count=exact",
+        @Header("Range") range: String = "0-0"
+    ): Response<Unit>
 }

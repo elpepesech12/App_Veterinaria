@@ -32,14 +32,14 @@
             android:name=".AdminMenuActivity"
             android:exported="false" />
         <activity
-            android:name=".VeterinarioHomeActivity"
-            android:exported="false" />
-        <activity
             android:name=".InsertarAnimalActivity"
             android:exported="false" />
         <activity
             android:name=".ListarAnimalesActivity"
-            android:exported="false" /> <!-- MainActivity (Login) es la pantalla de inicio -->
+            android:exported="false" />
+        <activity
+            android:name=".InicioVet"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
