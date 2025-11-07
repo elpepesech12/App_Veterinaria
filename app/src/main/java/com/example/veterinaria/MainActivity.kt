@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
             } else if (user == vetUser && pass == vetPass) {
                 // ROL VETERINARIO
-                val intent = Intent(this, VeterinarioHomeActivity::class.java)
+                val intent = Intent(this, InicioVet::class.java)
                 intent.putExtra("sesion", user)
                 startActivity(intent)
                 Toast.makeText(this, "Bienvenido Vet: $user", Toast.LENGTH_SHORT).show()

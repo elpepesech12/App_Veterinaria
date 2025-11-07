@@ -29,6 +29,19 @@
         android:theme="@style/Theme.Veterinaria"
         tools:targetApi="31">
         <activity
+            android:name=".AlertasVet"
+            android:exported="false" />
+        <activity
+            android:name=".RegistrosVet"
+            android:exported="false"
+            android:theme="@style/Theme.Veterinaria" />
+        <activity
+            android:name=".CitasVet"
+            android:exported="false" />
+        <activity
+            android:name=".InicioVet"
+            android:exported="false" />
+        <activity
             android:name=".VeterinarioHomeActivity"
             android:exported="false" />
         <activity
