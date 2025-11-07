@@ -14,5 +14,8 @@ data class Animal(
     val fechaNacimiento: String,
 
     @Json(name = "foto_url")
-    val fotoUrl: String?
+    val fotoUrl: String?,
+
+    @Json(name = "id_area")
+    val idArea: Long,
 )

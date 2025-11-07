@@ -9,18 +9,20 @@ import retrofit2.http.Query
 
 data class AnimalInsertRequest(
     val nombre: String,
-    val fecha_nacimiento: String,
-    val id_sexo: String = "I",
+    val fecha_nacimiento: String, // formato "YYYY-MM-DD"
+    val id_sexo: String = "M",
     val id_especie: Long = 1,
     val id_habitat: Long = 1,
-    val id_estado_salud: Long = 1
+    val id_estado_salud: Long = 1,
+    val id_area: Long = 1 // <-- ¡¡AÑADIR ESTA LÍNEA!!
 )
 
 
 interface SupabaseService {
     @GET("animal")
     suspend fun getAnimales(
-        @Query("select") select: String = "id_animal,nombre,fecha_nacimiento,foto_url",
+        // ¡Modificar esta línea!
+        @Query("select") select: String = "id_animal,nombre,fecha_nacimiento,foto_url,id_area",
         @Header("Range") range: String = "0-99"
     ): List<Animal>
 

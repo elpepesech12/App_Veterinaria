@@ -91,7 +91,8 @@ class InsertarAnimalActivity : AppCompatActivity() {
                         context = this@InsertarAnimalActivity,
                         nombre = nombre,
                         fechaNac = fecha,
-                        fotoUrl = null // Ignorado por ahora
+                        fotoUrl = null, // Ignorado por ahora
+                        idArea = 1L // <-- ¡¡AÑADE ESTA LÍNEA!! (Usamos 1 como default)
                     )
                     res.onSuccess { rowId ->
                         Toast.makeText(this@InsertarAnimalActivity, "Guardado local (id=$rowId)", Toast.LENGTH_SHORT).show()
