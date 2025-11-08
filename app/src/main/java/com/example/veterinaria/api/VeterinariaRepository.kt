@@ -89,4 +89,44 @@ object VeterinariaRepository {
             Result.failure(e)
         }
     }
+
+    suspend fun fetchSexos(): Result<List<Sexo>> = withContext(Dispatchers.IO) {
+        try {
+            Result.success(SupabaseClient.service.getSexos())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun fetchEspecies(): Result<List<Especie>> = withContext(Dispatchers.IO) {
+        try {
+            Result.success(SupabaseClient.service.getEspecies())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun fetchHabitats(): Result<List<Habitat>> = withContext(Dispatchers.IO) {
+        try {
+            Result.success(SupabaseClient.service.getHabitats())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun fetchEstadosSalud(): Result<List<EstadoSalud>> = withContext(Dispatchers.IO) {
+        try {
+            Result.success(SupabaseClient.service.getEstadosSalud())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun fetchAreas(): Result<List<Area>> = withContext(Dispatchers.IO) {
+        try {
+            Result.success(SupabaseClient.service.getAreas())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

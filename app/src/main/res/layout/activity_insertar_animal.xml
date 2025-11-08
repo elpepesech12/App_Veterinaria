@@ -1,69 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:id="@+id/main_insertar_animal"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".InsertarAnimalActivity">
+    android:fillViewport="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Insertar Nuevo Animal"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
-
-    <EditText
-        android:id="@+id/ed_animal_nombre"
+    <LinearLayout
+        android:id="@+id/main_insertar_animal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Nombre del animal"
-        android:inputType="textCapWords" />
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".InsertarAnimalActivity">
 
-    <EditText
-        android:id="@+id/ed_animal_fecha_nac"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="Fecha Nacimiento (YYYY-MM-DD)"
-        android:inputType="date" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre:" />
+        <EditText
+            android:id="@+id/ed_animal_nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ej: Simba"
+            android:inputType="textCapWords"
+            android:layout_marginBottom="8dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha Nacimiento (AAAA-MM-DD):" />
+        <EditText
+            android:id="@+id/ed_animal_fecha_nac"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ej: 2024-01-15"
+            android:inputType="date"
+            android:layout_marginBottom="16dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sexo:" />
+        <Spinner
+            android:id="@+id/sp_animal_sexo"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp"/>
 
-    <androidx.camera.view.PreviewView
-        android:id="@+id/camera_preview"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="8dp" />
-    <Button
-        android:id="@+id/btn_tomar_foto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tomar Foto" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Especie:" />
+        <Spinner
+            android:id="@+id/sp_animal_especie"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hábitat:" />
+        <Spinner
+            android:id="@+id/sp_animal_habitat"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp"/>
 
-    <Button
-        android:id="@+id/btn_insertar_animal_api"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Guardar en API" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estado de Salud:" />
+        <Spinner
+            android:id="@+id/sp_animal_estado"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp"/>
 
-    <Button
-        android:id="@+id/btn_insertar_animal_local"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Guardar en BD Local"
-        style="?attr/materialButtonOutlinedStyle" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Área:" />
+        <Spinner
+            android:id="@+id/sp_animal_area"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="16dp"/>
 
-    <Button
-        android:id="@+id/btn_volver_menu_insertar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Volver al Menú"
-        android:layout_marginTop="16dp"/>
+        <Button
+            android:id="@+id/btn_insertar_animal_api"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Insertar (API)" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_insertar_animal_local"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Insertar (Local)" />
+
+        <Button
+            android:id="@+id/btn_volver_menu_insertar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Volver al Menú"
+            style="?android:attr/buttonBarButtonStyle"
+            android:textColor="@color/design_default_color_error"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+</ScrollView>
