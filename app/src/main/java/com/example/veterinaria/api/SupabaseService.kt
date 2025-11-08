@@ -51,4 +51,18 @@ interface SupabaseService {
         @Header("Prefer") prefer: String = "count=exact",
         @Header("Range") range: String = "0-0"
     ): Response<Unit>
+
+    //PARA HACER EL LOGIN DEL VETERINARIO
+    @GET("veterinario")
+    suspend fun loginVeterinario(
+        @Query("email") email: String,     // ej: "eq.c.gomez@zoovet.cl"
+        @Query("password") password: String, // ej: "eq.vet1"
+
+        // Pedimos solo los datos que coinciden con el data class 'Veterinario'
+        @Query("select") select: String = "id_veterinario,nombre,apellido_p,email"
+    ): List<Veterinario>
+    // Devuelve una lista:
+    // - Con 1 'Veterinario' si el login es exitoso
+    // - Vacía (size 0) si el login es incorrecto
 }
+

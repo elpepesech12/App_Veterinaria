@@ -11,15 +11,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import com.example.veterinaria.api.VeterinariaRepository
 import com.example.veterinaria.funciones.ValidarConexionWAN
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() // <-- CÓDIGO BASE DEL PROFE
-        setContentView(R.layout.activity_main) // <-- CÓDIGO BASE DEL PROFE
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
 
-        //--- LÓGICA DEL PROFE: Verificación de Conexión ---
+        //--- Verificación de Conexión ---
         if (ValidarConexionWAN.isOnline(this)) {
             Log.d("LOGIN", "Dispositivo conectado a internet.")
         } else {
@@ -27,51 +30,68 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "SIN CONEXIÓN", Toast.LENGTH_SHORT).show()
         }
 
-        //--- LÓGICA DEL PROFE: Inicializar variables ---
-        val edUsuario: EditText = findViewById(R.id.ed_usuario) // Tu ID
-        val edPassword: EditText = findViewById(R.id.ed_password) // Tu ID
+        //variables
+        val edUsuario: EditText = findViewById(R.id.ed_usuario)
+        val edPassword: EditText = findViewById(R.id.ed_password)
         val btnLogin: Button = findViewById(R.id.btn_login)
         val txMensaje: TextView = findViewById(R.id.tx_mensaje)
 
         // Variables para comparar
         val adminUser = "admin"
         val adminPass = "admin"
-        val vetUser = "vet"
-        val vetPass = "vet"
 
         btnLogin.setOnClickListener {
-            val user = edUsuario.text.toString()
-            val pass = edPassword.text.toString()
+            val userEmail = edUsuario.text.toString().trim()
+            val pass = edPassword.text.toString().trim()
 
-            if (user == adminUser && pass == adminPass) {
+            // 1. Check de Admin
+            if (userEmail == adminUser && pass == adminPass) {
                 // ROL ADMIN
                 val intent = Intent(this, AdminMenuActivity::class.java)
-                intent.putExtra("sesion", user)
+                intent.putExtra("sesion", userEmail)
                 startActivity(intent)
-                Toast.makeText(this, "Bienvenido Admin: $user", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Bienvenido Admin: $userEmail", Toast.LENGTH_SHORT).show()
                 txMensaje.text = "login OK"
+            }
 
-            } else if (user == vetUser && pass == vetPass) {
+            else {
                 // ROL VETERINARIO
-                val intent = Intent(this, InicioVet::class.java)
-                intent.putExtra("sesion", user)
-                startActivity(intent)
-                Toast.makeText(this, "Bienvenido Vet: $user", Toast.LENGTH_SHORT).show()
-                txMensaje.text = "login OK"
+                btnLogin.isEnabled = false
+                txMensaje.text = "Validando..."
 
-            } else {
-                // ERROR
-                Toast.makeText(this, "Error: Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
-                txMensaje.text = "login NO"
+                // Usamos una corrutina para llamar a la API
+                lifecycleScope.launch {
+                    val loginResult = VeterinariaRepository.login(userEmail, pass)
+
+                    // Verificamos el resultado de la API
+                    loginResult.onSuccess { veterinario ->
+                        txMensaje.text = "login VET OK"
+                        Toast.makeText(this@MainActivity, "Bienvenido Dr. ${veterinario.nombre}", Toast.LENGTH_SHORT).show()
+
+                        val intent = Intent(this@MainActivity, InicioVet::class.java)
+
+                        // Enviamos los datos del veterinario a la siguiente pantalla
+                        intent.putExtra("ID_VET", veterinario.id)
+                        intent.putExtra("NOMBRE_VET", veterinario.nombre)
+
+                        startActivity(intent)
+
+                    }.onFailure { error ->
+                        Toast.makeText(this@MainActivity, error.message, Toast.LENGTH_SHORT).show()
+                        txMensaje.text = "login NO"
+                    }
+
+                    // 3. Vuelve a habilitar el botón (ya sea si falló o fue exitoso)
+                    btnLogin.isEnabled = true
+                }
             }
         }
 
-        //--- CÓDIGO BASE DEL PROFE (EdgeToEdge) ---
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        //--- FIN CÓDIGO BASE ---
     }
 }

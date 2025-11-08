@@ -24,6 +24,7 @@ object VeterinariaRepository {
         }
     }
 
+    //DATOS PARA EL INICIO DEL VET
     suspend fun getDashboardStats(): Result<DashboardStats> = withContext(Dispatchers.IO) {
         try {
             // 1. Llama a las dos nuevas funciones del servicio
@@ -42,7 +43,7 @@ object VeterinariaRepository {
         }
     }
 
-    // --- ¡AÑADE ESTA FUNCIÓN "HELPER"! ---
+    // --- FUNCIÓN "HELPER" ---
 
     /**
      * Función privada que lee el header 'Content-Range' (ej: "0-0/247")
@@ -62,5 +63,30 @@ object VeterinariaRepository {
 
         // 3. Lo convierte a número
         return totalString?.toLongOrNull() ?: 0L
+    }
+
+
+    //FUNCION PARA EL LOGIN DEL VET
+    suspend fun login(email: String, pass: String): Result<Veterinario> = withContext(Dispatchers.IO) {
+        try {
+            // Añadimos el "eq." (equals) que pide Supabase
+            val emailQuery = "eq.$email"
+            val passQuery = "eq.$pass"
+
+            // Llamamos a la nueva función del servicio
+            val vetList = SupabaseClient.service.loginVeterinario(emailQuery, passQuery)
+
+            // Verificamos la respuesta
+            vetList.firstOrNull()?.let { veterinarioEncontrado ->
+                // ¡Éxito! Encontramos un veterinario. Lo devolvemos.
+                Result.success(veterinarioEncontrado)
+            } ?: run {
+                // La lista vino vacía. Credenciales incorrectas.
+                Result.failure(Exception("Email o contraseña incorrectos"))
+            }
+        } catch (e: Exception) {
+            // Error de red, etc.
+            Result.failure(e)
+        }
     }
 }
