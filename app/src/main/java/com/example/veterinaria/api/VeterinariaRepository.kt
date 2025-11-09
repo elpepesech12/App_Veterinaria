@@ -89,4 +89,24 @@ object VeterinariaRepository {
             Result.failure(e)
         }
     }
+
+    //para el listado de animales para el inicio del vet
+    suspend fun fetchAnimalesDashboard(): Result<List<AnimalListado>> = withContext(Dispatchers.IO) {
+        try {
+            // Llama a la función del dashboard (con límite 3)
+            Result.success(SupabaseClient.service.getAnimalesDashboard(3))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // --- ¡AÑADE ESTA NUEVA FUNCIÓN! ---
+    suspend fun fetchAllAnimalesListado(): Result<List<AnimalListado>> = withContext(Dispatchers.IO) {
+        try {
+            // Llama a la función que trae TODOS los animales (sin límite)
+            Result.success(SupabaseClient.service.getAllAnimalesListado())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

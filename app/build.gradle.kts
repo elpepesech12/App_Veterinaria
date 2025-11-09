@@ -74,5 +74,6 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:1.3.4")
     implementation("androidx.camera:camera-view:1.3.4")
 
-
+    //IMPLEMENTACIÓN PARA LAS FOTOS DE LOS ANIMALES
+    implementation("io.coil-kt:coil:2.6.0")
 }

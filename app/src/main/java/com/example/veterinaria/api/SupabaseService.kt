@@ -64,5 +64,15 @@ interface SupabaseService {
     // Devuelve una lista:
     // - Con 1 'Veterinario' si el login es exitoso
     // - Vacía (size 0) si el login es incorrecto
+
+    //PARA EL LISTADO DE ANIMALES DEL INICIO DEL VET
+    @GET("vista_animales_listado")
+    suspend fun getAnimalesDashboard(
+        @Query("limit") limit: Int = 3
+    ): List<AnimalListado>
+
+    // Llama a la MISMA vista, pero sin el límite
+    @GET("vista_animales_listado")
+    suspend fun getAllAnimalesListado(): List<AnimalListado>
 }
 
