@@ -12,8 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.veterinaria.R
+import com.example.veterinaria.api.AlertaUI
 import com.example.veterinaria.api.AlertasAdapter
 import com.example.veterinaria.api.VeterinariaRepository
+import com.google.android.material.button.MaterialButtonToggleGroup
 import kotlinx.coroutines.launch
 
 class AlertasVet : Fragment() {
@@ -30,8 +32,11 @@ class AlertasVet : Fragment() {
 
         val recyclerAlertas : RecyclerView = view.findViewById(R.id.recycler_view_alertas)
         val progressBar : ProgressBar = view.findViewById(R.id.progress_bar_alertas)
+        val toggleGroup: MaterialButtonToggleGroup = view.findViewById(R.id.toggleGroup_alertas)
 
         var adapterAlertas : AlertasAdapter? = null
+
+        val listaMaestraDeAlertas = mutableListOf<AlertaUI>()
 
         fun setupRecyclerView() {
             // Inicializa el adapter con una lista vacía
@@ -45,46 +50,84 @@ class AlertasVet : Fragment() {
             progressBar.visibility = View.VISIBLE
             recyclerAlertas.visibility = View.GONE
 
-            // Usa 'lifecycleScope.launch' para llamar a la función suspend del repo
             lifecycleScope.launch {
                 try {
-                    // 5. Llama al Repositorio
                     val resultado = VeterinariaRepository.fetchAlertas()
 
-                    // 6. Verifica el resultado
                     if (resultado.isSuccess) {
                         val alertas = resultado.getOrNull()
                         if (!alertas.isNullOrEmpty()) {
-                            // ¡Éxito! Actualiza el adapter
-                            adapterAlertas?.updateData(alertas)
+
+                            // Guardamos la lista completa en nuestra variable maestra
+                            listaMaestraDeAlertas.clear()
+                            listaMaestraDeAlertas.addAll(alertas)
+
+                            // por defecto, mostramos "Todas"
+                            // (Aseguramos que el botón "Todas" esté marcado)
+                            toggleGroup.check(R.id.btn_filtro_todas)
+                            // Actualizamos el adapter con la lista completa
+                            adapterAlertas?.updateData(listaMaestraDeAlertas)
+
                         } else {
-                            // Éxito, pero no vinieron datos
-                            Toast.makeText(context, "No se encontraron alertas", Toast.LENGTH_SHORT)
-                                .show()
+                            Toast.makeText(context, "No se encontraron alertas", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        // Fallo (error de red, JSON, etc.)
-                        Log.e(
-                            "AlertasVet",
-                            "Error al cargar alertas: ${resultado.exceptionOrNull()?.message}"
-                        )
-                        Toast.makeText(context, "Error al cargar alertas", Toast.LENGTH_SHORT)
-                            .show()
+                        Log.e("AlertasVet", "Error al cargar alertas: ${resultado.exceptionOrNull()?.message}")
+                        Toast.makeText(context, "Error al cargar alertas", Toast.LENGTH_SHORT).show()
                     }
-
                 } catch (e: Exception) {
-                    // Captura cualquier otra excepción
                     Log.e("AlertasVet", "Excepción inesperada: ${e.message}")
                     Toast.makeText(context, "Error inesperado", Toast.LENGTH_SHORT).show()
                 } finally {
-                    // 7. Oculta la barra de progreso
                     progressBar.visibility = View.GONE
                     recyclerAlertas.visibility = View.VISIBLE
                 }
             }
         }
 
+        //los filtros de arriba de la pestaña
+        fun setupFiltros() {
+            toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+                // Solo reaccionamos al botón que se acaba de marcar
+                if (isChecked) {
+                    // Creamos una nueva lista filtrada basándonos en la listaMaestra
+                    val listaFiltrada = when (checkedId) {
+
+                        R.id.btn_filtro_criticas -> {
+                            listaMaestraDeAlertas.filter {
+                                it.tipoAlerta.nombre.equals("Crítico", ignoreCase = true)
+                            }
+                        }
+
+                        R.id.btn_filtro_advertencias -> {
+                            listaMaestraDeAlertas.filter {
+                                it.tipoAlerta.nombre.equals("Advertencia", ignoreCase = true)
+                            }
+                        }
+
+                        R.id.btn_filtro_info -> {
+                            listaMaestraDeAlertas.filter {
+                                // Filtramos por "Informativo" O por "Exitosa" (como en tu adapter)
+                                it.tipoAlerta.nombre.equals("Informativo", ignoreCase = true) ||
+                                        it.titulo.contains("Exitosa", ignoreCase = true)
+                            }
+                        }
+
+                        // Caso por defecto: R.id.btn_filtro_todas
+                        else -> {
+                            listaMaestraDeAlertas // Devolvemos la lista completa
+                        }
+                    }
+
+                    // Actualizamos el adapter con la nueva lista filtrada
+                    adapterAlertas?.updateData(listaFiltrada)
+                }
+            }
+        }
+
+
         setupRecyclerView()
         cargarDatosDeAlertas()
+        setupFiltros()
     }
 }

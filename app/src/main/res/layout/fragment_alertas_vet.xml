@@ -43,7 +43,7 @@
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Información" />
+            android:text="Info" />
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
