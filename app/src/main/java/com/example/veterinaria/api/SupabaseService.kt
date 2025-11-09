@@ -120,5 +120,24 @@ interface SupabaseService {
         @Query("order") order: String = "fecha.desc,hora.desc"
     ): List<AlertaUI>
 
+    /**
+     * Obtiene las citas para el calendario.
+     * Pide todas las citas entre una fecha de inicio y fin.
+     */
+    @GET("cita") // <-- Llama a la tabla 'cita' (minúscula)
+    suspend fun getCitasPorRango(
+        // Pide las relaciones (joins)
+        @Query("select") select: String = "id_cita,fecha,hora,animal:animal(id_animal,nombre),tipo_cita:tipo_cita(id_tipo_cita,nombre),veterinario:veterinario(id_veterinario,nombre,apellido_p,email)",
+
+        // Filtro de fecha "mayor o igual que"
+        @Query("fecha") gte: String, // "gte.2025-05-01"
+
+        // Filtro de fecha "menor o igual que"
+        @Query("fecha") lte: String, // "lte.2026-05-01"
+
+        // Ordena por fecha y hora
+        @Query("order") order: String = "fecha.asc,hora.asc"
+
+    ): List<CitaUI>
 }
 

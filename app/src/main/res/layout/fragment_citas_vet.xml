@@ -1,15 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D0E0FF">
+    android:background="#F7F7F7"
+    tools:context=".PantallasVet.CitasVet">
 
     <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:text="PANTALLA DE CITAS"
-    android:textSize="30sp"
-    android:textStyle="bold" />
+        android:id="@+id/txt_titulo_citas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Calendario de Citas"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_agregar_cita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_agregar"
+        app:layout_constraintBottom_toBottomOf="@id/txt_titulo_citas"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txt_titulo_citas" />
+
+    <TextView
+        android:id="@+id/txt_mes_calendario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/btn_mes_siguiente"
+        app:layout_constraintStart_toEndOf="@+id/btn_mes_anterior"
+        app:layout_constraintTop_toBottomOf="@id/txt_titulo_citas"
+        tools:text="Noviembre 2025" />
+
+    <ImageButton
+        android:id="@+id/btn_mes_anterior"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_izquierda"
+        app:layout_constraintBottom_toBottomOf="@id/txt_mes_calendario"
+        app:layout_constraintEnd_toStartOf="@id/txt_mes_calendario"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txt_mes_calendario" />
+
+    <ImageButton
+        android:id="@+id/btn_mes_siguiente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_derecha"
+        app:layout_constraintBottom_toBottomOf="@id/txt_mes_calendario"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/txt_mes_calendario"
+        app:layout_constraintTop_toTopOf="@id/txt_mes_calendario" />
+
+    <LinearLayout
+        android:id="@+id/layout_dias_semana"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintTop_toBottomOf="@id/txt_mes_calendario">
+
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="center" android:text="Dom" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="center" android:text="Lun" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="center" android:text="Mar" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="center" android:text="Mié" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="center" android:text="Jue" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="center" android:text="Vie" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textAlignment="center" android:text="Sáb" />
+
+    </LinearLayout>
+
+    <com.kizitonwose.calendar.view.CalendarView
+        android:id="@+id/calendario_vista"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:cv_dayViewResource="@layout/dia_calendario_molde"
+        app:cv_orientation="horizontal"
+        app:cv_outDateStyle="endOfGrid"
+        app:cv_scrollPaged="true"
+        app:layout_constraintTop_toBottomOf="@id/layout_dias_semana" />
+
+    <View
+        android:id="@+id/divisor"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/dividerHorizontal"
+        app:layout_constraintTop_toBottomOf="@id/calendario_vista" />
+
+    <TextView
+        android:id="@+id/txt_titulo_citas_del_dia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/divisor"
+        tools:text="Citas para 9 de noviembre" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_citas_del_dia"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_titulo_citas_del_dia"
+        tools:listitem="@layout/item_cita" />
+
+    <TextView
+        android:id="@+id/txt_no_citas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No hay citas programadas para este día"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?android:attr/textColorSecondary"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/recycler_citas_del_dia"
+        android:layout_marginTop="32dp"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

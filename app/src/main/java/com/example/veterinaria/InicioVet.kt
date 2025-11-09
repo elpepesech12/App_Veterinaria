@@ -7,7 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.veterinaria.PantallasVet.AlertasVet
-import com.example.veterinaria.PantallasVet.CitasVetFragment
+import com.example.veterinaria.PantallasVet.CitasVet
 import com.example.veterinaria.PantallasVet.HomeVet
 import com.example.veterinaria.PantallasVet.RegistrosVet
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -36,7 +36,7 @@ class InicioVet : AppCompatActivity() {
                     true
                 }
                 R.id.nav_citas -> {
-                    loadFragment(CitasVetFragment())
+                    loadFragment(CitasVet())
                     true
                 }
                 R.id.nav_registros -> {

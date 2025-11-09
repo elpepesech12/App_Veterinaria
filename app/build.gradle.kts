@@ -29,6 +29,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11 // Como el profe
         targetCompatibility = JavaVersion.VERSION_11 // Como el profe
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "11" // Como el profe
@@ -76,4 +77,8 @@ dependencies {
 
     //IMPLEMENTACIÓN PARA LAS FOTOS DE LOS ANIMALES
     implementation("io.coil-kt:coil:2.6.0")
+
+    // PARA EL CALENDARIOOO
+    implementation("com.kizitonwose.calendar:view:2.5.1")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }

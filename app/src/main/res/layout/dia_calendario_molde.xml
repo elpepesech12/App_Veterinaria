@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp">
+
+    <View
+        android:id="@+id/vista_dia_seleccionado"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/fondo_dia_seleccionado"
+        android:visibility="invisible"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/txt_dia_calendario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        app:layout_constraintBottom_toBottomOf="@id/vista_dia_seleccionado"
+        app:layout_constraintEnd_toEndOf="@id/vista_dia_seleccionado"
+        app:layout_constraintStart_toStartOf="@id/vista_dia_seleccionado"
+        app:layout_constraintTop_toTopOf="@id/vista_dia_seleccionado"
+        tools:text="22" />
+
+    <View
+        android:id="@+id/vista_punto_cita"
+        android:layout_width="4dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/fondo_punto_cita"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@id/txt_dia_calendario"
+        app:layout_constraintStart_toStartOf="@id/txt_dia_calendario"
+        app:layout_constraintTop_toBottomOf="@id/txt_dia_calendario"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

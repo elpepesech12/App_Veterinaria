@@ -159,4 +159,27 @@ object VeterinariaRepository {
             Result.failure(e)
         }
     }
+
+    // --- ¡AÑADE ESTA NUEVA FUNCIÓN! ---
+
+    suspend fun fetchCitasPorRango(
+        fechaInicio: String, // "2025-05-01"
+        fechaFin: String     // "2026-05-01"
+    ): Result<List<CitaUI>> = withContext(Dispatchers.IO) {
+        try {
+            // Añade los prefijos "gte." (mayor o igual) y "lte." (menor o igual)
+            val queryGte = "gte.$fechaInicio"
+            val queryLte = "lte.$fechaFin"
+
+            val citas = SupabaseClient.service.getCitasPorRango(
+                select = "id_cita,fecha,hora,animal:animal(id_animal,nombre),tipo_cita:tipo_cita(id_tipo_cita,nombre),veterinario:veterinario(id_veterinario,nombre,apellido_p,email)",
+                gte = queryGte,
+                lte = queryLte
+            )
+            Result.success(citas)
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
