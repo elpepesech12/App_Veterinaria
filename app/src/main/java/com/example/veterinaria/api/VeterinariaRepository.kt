@@ -149,4 +149,14 @@ object VeterinariaRepository {
             Result.failure(e)
         }
     }
+
+    suspend fun fetchAlertas(): Result<List<AlertaUI>> = withContext(Dispatchers.IO) {
+        try {
+            // Llama a la nueva función del servicio
+            Result.success(SupabaseClient.service.getAlertas())
+        } catch (e: Exception) {
+            // Error de red, JSON que no calza, etc.
+            Result.failure(e)
+        }
+    }
 }

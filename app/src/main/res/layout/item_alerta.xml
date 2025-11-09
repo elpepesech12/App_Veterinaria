@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/img_alerta_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_warning"/>
+
+        <TextView
+        android:id="@+id/txt_alerta_titulo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/btn_cerrar_alerta"
+        app:layout_constraintStart_toEndOf="@id/img_alerta_icon"
+        app:layout_constraintTop_toTopOf="@id/img_alerta_icon"
+        tools:text="Cambio en Comportamiento" />
+
+        <TextView
+            android:id="@+id/txt_alerta_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@id/txt_alerta_titulo"
+            app:layout_constraintTop_toBottomOf="@id/txt_alerta_titulo"
+            tools:background="@drawable/bg_tag_advertencia"
+            tools:text="Advertencia" />
+
+        <TextView
+            android:id="@+id/txt_alerta_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="?attr/textAppearanceLabelMedium"
+            app:layout_constraintBottom_toBottomOf="@id/txt_alerta_tag"
+            app:layout_constraintStart_toEndOf="@id/txt_alerta_tag"
+            app:layout_constraintTop_toTopOf="@id/txt_alerta_tag"
+            tools:text="Hace 5 horas" />
+
+        <ImageView
+            android:id="@+id/btn_cerrar_alerta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_alerta_descripcion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/txt_alerta_titulo"
+            app:layout_constraintTop_toBottomOf="@id/txt_alerta_tag"
+            tools:text="Simba (León) ha mostrado cambios en su patrón de alimentación." />
+
+        <TextView
+            android:id="@+id/txt_alerta_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_alerta_descripcion"
+            tools:text="Área de Felinos" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

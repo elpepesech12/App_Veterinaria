@@ -50,7 +50,7 @@ class AnimalesAdapter(
         // (Usará la URL de Supabase Storage que guardaste en la columna foto_url)
         holder.imgAnimal.load(animal.fotoUrl) {
             placeholder(R.drawable.ic_pulso) // Una imagen de "cargando"
-            error(R.drawable.ic_alerta_critico) // Una imagen de "error"
+            error(R.drawable.ic_error)
         }
 
         // Lógica para el Tag de Estado

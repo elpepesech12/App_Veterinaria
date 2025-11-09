@@ -109,5 +109,16 @@ interface SupabaseService {
     suspend fun getAllAnimalesListado(): List<AnimalListado>
 
 
+    /**
+     * Obtiene TODAS las alertas para la pantalla de Alertas
+     * Ordenadas por fecha y hora (más nuevas primero)
+     */
+    @GET("alerta")
+    suspend fun getAlertas(
+        @Query("select") select: String = "titulo,descripcion,fecha,hora,tipo_alerta:tipo_alerta(id_tipo_alerta,nombre_tipo),area:area_animal(id_area,nombre)",
+        // Ordena por fecha descendente, y luego por hora descendente
+        @Query("order") order: String = "fecha.desc,hora.desc"
+    ): List<AlertaUI>
+
 }
 

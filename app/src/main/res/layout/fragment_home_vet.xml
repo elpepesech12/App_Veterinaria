@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Críticos"
-                android:drawableStart="@drawable/ic_alerta_critico"
+                android:drawableStart="@drawable/ic_error"
                 android:drawablePadding="8dp"
                 android:drawableTint="#C62828" />
 
