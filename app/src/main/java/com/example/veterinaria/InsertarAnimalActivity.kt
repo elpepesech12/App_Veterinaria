@@ -43,23 +43,19 @@ class InsertarAnimalActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_insertar_animal)
 
-        // --- LÓGICA DEL PROFE: Verificación de Conexión ---
         if (!ValidarConexionWAN.isOnline(this)) {
             Toast.makeText(this, "SIN CONEXIÓN. Datos locales y API deshabilitados.", Toast.LENGTH_LONG).show()
         }
 
-        //--- LÓGICA DEL PROFE: FindViewById (para todo) ---
         val edNombre: EditText = findViewById(R.id.ed_animal_nombre)
         val edFechaNac: EditText = findViewById(R.id.ed_animal_fecha_nac)
 
-        // Spinners
         val spSexo: Spinner = findViewById(R.id.sp_animal_sexo)
         val spEspecie: Spinner = findViewById(R.id.sp_animal_especie)
         val spHabitat: Spinner = findViewById(R.id.sp_animal_habitat)
         val spEstado: Spinner = findViewById(R.id.sp_animal_estado)
         val spArea: Spinner = findViewById(R.id.sp_animal_area)
 
-        // Botones
         val btnInsertarApi: Button = findViewById(R.id.btn_insertar_animal_api)
         val btnInsertarLocal: Button = findViewById(R.id.btn_insertar_animal_local)
         val btnVolver: ImageButton = findViewById(R.id.btn_volver_menu_insertar)
