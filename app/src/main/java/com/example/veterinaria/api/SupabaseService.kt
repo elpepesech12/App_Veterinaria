@@ -93,10 +93,10 @@ interface SupabaseService {
 
 
 
-    @GET("area") // Nombre de la tabla
+    @GET("area_animal") // <-- ¡Este es el nombre real de tu tabla!
     suspend fun getAreas(
         @Query("select") select: String = "id_area,nombre"
-    ): List<Area> // <-- Esto usa el data class Area que ya tienes
+    ): List<Area>
 
     //PARA EL LISTADO DE ANIMALES DEL INICIO DEL VET
     @GET("vista_animales_listado")
