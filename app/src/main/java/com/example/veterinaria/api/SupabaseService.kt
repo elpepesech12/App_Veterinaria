@@ -65,6 +65,39 @@ interface SupabaseService {
     // - Con 1 'Veterinario' si el login es exitoso
     // - Vacía (size 0) si el login es incorrecto
 
+    @GET("sexo") // Nombre de la tabla
+    suspend fun getSexos(
+        @Query("select") select: String = "id_sexo,descripcion"
+    ): List<Sexo>
+
+
+
+    @GET("especie") // Nombre de la tabla
+    suspend fun getEspecies(
+        @Query("select") select: String = "id_especie,nombre_comun"
+    ): List<Especie>
+
+
+
+    @GET("habitat") // Nombre de la tabla
+    suspend fun getHabitats(
+        @Query("select") select: String = "id_habitat,nombre"
+    ): List<Habitat>
+
+
+
+    @GET("estado_salud") // Nombre de la tabla
+    suspend fun getEstadosSalud(
+        @Query("select") select: String = "id_estado_salud,estado"
+    ): List<EstadoSalud>
+
+
+
+    @GET("area") // Nombre de la tabla
+    suspend fun getAreas(
+        @Query("select") select: String = "id_area,nombre"
+    ): List<Area> // <-- Esto usa el data class Area que ya tienes
+
     //PARA EL LISTADO DE ANIMALES DEL INICIO DEL VET
     @GET("vista_animales_listado")
     suspend fun getAnimalesDashboard(
@@ -74,5 +107,7 @@ interface SupabaseService {
     // Llama a la MISMA vista, pero sin el límite
     @GET("vista_animales_listado")
     suspend fun getAllAnimalesListado(): List<AnimalListado>
+
+
 }
 
