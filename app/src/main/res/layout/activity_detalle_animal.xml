@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_detalle_animal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F9F9"
+    tools:context=".DetalleAnimalActivity">
+
+    <ImageButton
+        android:id="@+id/btn_detalle_volver"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_arrow_back"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Volver"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tx_detalle_titulo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Detalle del Animal"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintStart_toEndOf="@id/btn_detalle_volver"
+        app:layout_constraintTop_toTopOf="@id/btn_detalle_volver"
+        app:layout_constraintBottom_toBottomOf="@id/btn_detalle_volver"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/img_detalle_foto"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_detalle_volver"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:srcCompat="@drawable/ic_config" />
+
+    <TextView
+        android:id="@+id/tx_detalle_nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Simba"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/img_detalle_foto"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_info"
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintTop_toBottomOf="@id/tx_detalle_nombre">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Información"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tx_detalle_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="ID: 1" />
+
+            <TextView
+                android:id="@+id/tx_detalle_fecha_nac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Nacimiento: 2020-05-10" />
+
+            <TextView
+                android:id="@+id/tx_detalle_sexo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Sexo ID: M" />
+
+            <TextView
+                android:id="@+id/tx_detalle_estado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Estado ID: 1" />
+
+            <TextView
+                android:id="@+id/tx_detalle_especie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Especie ID: 1" />
+
+            <TextView
+                android:id="@+id/tx_detalle_habitat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Hábitat ID: 1" />
+
+            <TextView
+                android:id="@+id/tx_detalle_area"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Área ID: 1" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
