@@ -160,14 +160,13 @@ object VeterinariaRepository {
         }
     }
 
-    // --- ¡AÑADE ESTA NUEVA FUNCIÓN! ---
 
     suspend fun fetchCitasPorRango(
         fechaInicio: String, // "2025-05-01"
         fechaFin: String     // "2026-05-01"
     ): Result<List<CitaUI>> = withContext(Dispatchers.IO) {
         try {
-            // Añade los prefijos "gte." (mayor o igual) y "lte." (menor o igual)
+            // gte. (mayor o igual) y lte. (menor o igual)
             val queryGte = "gte.$fechaInicio"
             val queryLte = "lte.$fechaFin"
 
@@ -178,6 +177,50 @@ object VeterinariaRepository {
             )
             Result.success(citas)
 
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun fetchAnimalesParaSpinner(): Result<List<AnimalSimple>> = withContext(Dispatchers.IO) {
+        try {
+            // Asegúrate de tener esta función en tu SupabaseService.kt
+            // @GET("animal?select=id_animal,nombre")
+            // suspend fun getAnimalesSimples(): List<AnimalSimple>
+
+            // --- Solución Rápida (si no quieres cambiar el service) ---
+            // Reutilizamos la función getAnimales que ya tenías
+            val animalesCompletos = SupabaseClient.service.getAnimales()
+            val animalesSimples = animalesCompletos.map {
+                AnimalSimple(id = it.id, nombre = it.nombre)
+            }
+            Result.success(animalesSimples)
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun fetchTiposCita(): Result<List<TipoCitaSimple>> = withContext(Dispatchers.IO) {
+        try {
+            // ¡OJO! Esta función debe existir en tu SupabaseService.kt:
+            // @GET("tipo_cita?select=id_tipo_cita,nombre")
+            // suspend fun getTiposCita(): List<TipoCitaSimple>
+
+            // Si no la tienes, añádela a SupabaseService.kt
+            Result.success(SupabaseClient.service.getTiposCita())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun insertCita(request: InsertarCita): Result<CitaUI> = withContext(Dispatchers.IO) {
+        try {
+            val responseList = SupabaseClient.service.insertCita(request)
+            // La API devuelve una lista, pero solo queremos el primer item
+            responseList.firstOrNull()?.let {
+                Result.success(it)
+            } ?: Result.failure(Exception("La API no devolvió la cita creada"))
         } catch (e: Exception) {
             Result.failure(e)
         }

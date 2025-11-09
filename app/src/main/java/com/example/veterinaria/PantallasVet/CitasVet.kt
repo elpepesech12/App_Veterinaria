@@ -13,12 +13,14 @@ import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.veterinaria.R
 import com.example.veterinaria.api.CitaUI
 import com.example.veterinaria.api.CitasAdapter
 import com.example.veterinaria.api.VeterinariaRepository
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
@@ -67,6 +69,10 @@ class CitasVet : Fragment() {
         val btnMesSiguiente: ImageButton = view.findViewById(R.id.btn_mes_siguiente)
         val btnMesAnterior: ImageButton = view.findViewById(R.id.btn_mes_anterior)
 
+        val fechaInicio = hoy.minusMonths(6).withDayOfMonth(1).toString()
+        val fechaFin = hoy.plusMonths(6).withDayOfMonth(31).toString()
+
+        val fabAgregarCita: FloatingActionButton = view.findViewById(R.id.fab_agregar_cita)
 
         // Función para actualizar la lista de abajo
         fun filtrarCitasParaDia(fecha: LocalDate) {
@@ -226,13 +232,20 @@ class CitasVet : Fragment() {
             }
         }
 
+        fabAgregarCita.setOnClickListener { // <-- ¡LÍNEA 3: EL LISTENER!
+            // Esta es tu lógica, copiada de HomeVet
+            parentFragmentManager.beginTransaction()
+                // OJO: Asegúrate que el ID (R.id.fragment_container) sea el
+                //      ID del FrameLayout que está en tu Activity (InicioVet)
+                .replace(R.id.fragment_container, AgregarCita()) // <-- ¡LÍNEA 4: LA ACCIÓN!
+                .addToBackStack(null) // Permite volver atrás
+                .commit()
+        }
 
         setupRecyclerCitas()
         setupCalendario()
-
-        val fechaInicio = hoy.minusMonths(6).withDayOfMonth(1).toString()
-        val fechaFin = hoy.plusMonths(6).withDayOfMonth(31).toString()
         cargarDatosDeCitas(fechaInicio, fechaFin)
+
     }
 
 }

@@ -139,5 +139,21 @@ interface SupabaseService {
         @Query("order") order: String = "fecha.asc,hora.asc"
 
     ): List<CitaUI>
+
+    @POST("cita")
+    suspend fun insertCita(
+        @Body request: InsertarCita,
+        // Pedimos que nos devuelva el objeto creado
+        @Header("Prefer") prefer: String = "return=representation",
+
+        // Le dice a Supabase que la respuesta SÍ incluya los joins
+        @Query("select") select: String = "id_cita,fecha,hora,animal:animal(id_animal,nombre),tipo_cita:tipo_cita(id_tipo_cita,nombre),veterinario:veterinario(id_veterinario,nombre,apellido_p,email)"
+
+    ): List<CitaUI>
+
+    @GET("tipo_cita")
+    suspend fun getTiposCita(
+        @Query("select") select: String = "id_tipo_cita,nombre"
+    ): List<TipoCitaSimple>
 }
 

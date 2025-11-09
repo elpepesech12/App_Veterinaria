@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.veterinaria.api.SesionManager
 import com.example.veterinaria.api.VeterinariaRepository
 import com.example.veterinaria.funciones.ValidarConexionWAN
 import kotlinx.coroutines.launch
@@ -52,9 +53,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 Toast.makeText(this, "Bienvenido Admin: $userEmail", Toast.LENGTH_SHORT).show()
                 txMensaje.text = "login OK"
-            }
-
-            else {
+            } else {
                 // ROL VETERINARIO
                 btnLogin.isEnabled = false
                 txMensaje.text = "Validando..."
@@ -67,6 +66,9 @@ class MainActivity : AppCompatActivity() {
                     loginResult.onSuccess { veterinario ->
                         txMensaje.text = "login VET OK"
                         Toast.makeText(this@MainActivity, "Bienvenido Dr. ${veterinario.nombre}", Toast.LENGTH_SHORT).show()
+
+                        // Guardamos el ID y nombre del veterinario en SharedPreferences
+                        SesionManager.saveLogin(this@MainActivity, veterinario)
 
                         val intent = Intent(this@MainActivity, InicioVet::class.java)
 
