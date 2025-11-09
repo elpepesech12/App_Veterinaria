@@ -62,8 +62,6 @@ class AlertasVet : Fragment() {
                             listaMaestraDeAlertas.clear()
                             listaMaestraDeAlertas.addAll(alertas)
 
-                            // por defecto, mostramos "Todas"
-                            // (Aseguramos que el botón "Todas" esté marcado)
                             toggleGroup.check(R.id.btn_filtro_todas)
                             // Actualizamos el adapter con la lista completa
                             adapterAlertas?.updateData(listaMaestraDeAlertas)
@@ -88,9 +86,7 @@ class AlertasVet : Fragment() {
         //los filtros de arriba de la pestaña
         fun setupFiltros() {
             toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
-                // Solo reaccionamos al botón que se acaba de marcar
                 if (isChecked) {
-                    // Creamos una nueva lista filtrada basándonos en la listaMaestra
                     val listaFiltrada = when (checkedId) {
 
                         R.id.btn_filtro_criticas -> {
@@ -113,7 +109,6 @@ class AlertasVet : Fragment() {
                             }
                         }
 
-                        // Caso por defecto: R.id.btn_filtro_todas
                         else -> {
                             listaMaestraDeAlertas // Devolvemos la lista completa
                         }

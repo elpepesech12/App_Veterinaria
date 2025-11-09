@@ -24,7 +24,6 @@ class InicioVet : AppCompatActivity() {
 
         fun loadFragment(fragment: Fragment) {
             val transaction = supportFragmentManager.beginTransaction()
-            // R.id.fragment_container es el ID de tu "agujero" (el FrameLayout)
             transaction.replace(R.id.fragment_container, fragment)
             transaction.commit()
         }
@@ -51,12 +50,8 @@ class InicioVet : AppCompatActivity() {
             }
         }
 
-        // --- Cargar la pantalla de inicio por defecto ---
-        // Reemplazamos "barraNav.selectedItemId = R.id.nav_inicio"
-        // por este bloque:
+
         if (savedInstanceState == null) {
-            // Esto asegura que solo cargue el fragmento de inicio
-            // la primera vez que se crea la app, y no cuando giras la pantalla
             barraNav.selectedItemId = R.id.nav_inicio
             loadFragment(HomeVet())
         }

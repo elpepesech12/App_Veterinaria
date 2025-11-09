@@ -13,21 +13,22 @@ import com.example.veterinaria.funciones.CargarAnimalesApi
 import com.example.veterinaria.funciones.LeerAnimalesLocal
 import com.example.veterinaria.funciones.ValidarConexionWAN
 import androidx.lifecycle.lifecycleScope
+import com.example.veterinaria.api.Animal
+import com.example.veterinaria.bd.AnimalLocal
 import kotlinx.coroutines.launch
 
-// 1. Renombramos la clase
 class ListarAnimalesActivity : AppCompatActivity() {
-
-    // Variable de clase para el ListView, para usarla en onResume
-    private lateinit var lvAnimales: ListView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        // 2. Apunta al nuevo layout
         setContentView(R.layout.activity_listar_animales)
 
-        //--- LÓGICA DEL PROFE: Verificación de Conexión ---
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_listar_animales)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         if (ValidarConexionWAN.isOnline(this)) {
             val toast = Toast.makeText(this, "CON CONEXIÓN", Toast.LENGTH_SHORT)
             toast.show()
@@ -36,71 +37,72 @@ class ListarAnimalesActivity : AppCompatActivity() {
             toast.show()
         }
 
-        //--- LÓGICA DEL PROFE: FindViewById ---
-        // 3. Hacemos la variable de clase
-        lvAnimales = findViewById(R.id.lv_animales_admin)
-        // 4. Agregamos el botón de volver
+        val lvAnimales: ListView = findViewById(R.id.lv_animales_admin)
         val btnVolver: Button = findViewById(R.id.btn_volver_al_menu)
-        // 5. El botón de insertar ya no existe aquí
-        // val btnIrAInsertar: Button = findViewById(R.id.btn_ir_a_insertar)
 
-        //--- LÓGICA DEL PROFE: Listeners ---
 
-        // 6. Listener para el botón Volver
         btnVolver.setOnClickListener {
-            finish() // Cierra esta activity y vuelve al menú
+            finish()
         }
 
-        // 7. Listener para ELIMINAR (como en MainActivity2)
         lvAnimales.setOnItemClickListener { parent, view, position, id ->
-            val itemSeleccionado = parent.getItemAtPosition(position).toString()
 
-            // Aquí puedes mostrar un Toast o un Diálogo de confirmación
-            // Por ahora, solo un Toast para confirmar la selección
-            val toast = Toast.makeText(this, "Opción Eliminar para: $itemSeleccionado", Toast.LENGTH_SHORT)
-            toast.show()
+            val item = parent.getItemAtPosition(position)
 
-            // --- LÓGICA PENDIENTE DE ELIMINACIÓN ---
-            // Aquí deberías llamar a la función para eliminar de la API o SQLite
-            // (ej. EliminarAnimalApi.eliminar(this, idAnimal) )
-            // Y después de eliminar, volver a cargar los datos:
-            // cargarDatos()
-            // --- FIN LÓGICA PENDIENTE ---
+            val intent = Intent(this, DetalleAnimalActivity::class.java)
+
+            if (item is Animal) {
+                intent.putExtra("ANIMAL_ID", item.id)
+                intent.putExtra("ANIMAL_NOMBRE", item.nombre)
+                intent.putExtra("ANIMAL_FECHA", item.fechaNacimiento)
+                intent.putExtra("ANIMAL_SEXO", item.idSexo)
+                intent.putExtra("ANIMAL_ESPECIE", item.idEspecie)
+                intent.putExtra("ANIMAL_HABITAT", item.idHabitat)
+                intent.putExtra("ANIMAL_ESTADO", item.idEstadoSalud)
+                intent.putExtra("ANIMAL_AREA", item.idArea)
+                intent.putExtra("ES_LOCAL", false)
+                intent.putExtra("ANIMAL_FOTO", item.fotoUrl)
+
+                startActivity(intent)
+
+            } else if (item is AnimalLocal) {
+                intent.putExtra("ANIMAL_ID", item.id.toLong())
+                intent.putExtra("ANIMAL_NOMBRE", item.nombre)
+                intent.putExtra("ANIMAL_FECHA", item.fechaNacimiento)
+                intent.putExtra("ANIMAL_SEXO", item.idSexo)
+                intent.putExtra("ANIMAL_ESPECIE", item.idEspecie.toLong())
+                intent.putExtra("ANIMAL_HABITAT", item.idHabitat.toLong())
+                intent.putExtra("ANIMAL_ESTADO", item.idEstadoSalud.toLong())
+                intent.putExtra("ANIMAL_AREA", item.idArea.toLong())
+                intent.putExtra("ES_LOCAL", true)
+                intent.putExtra("ANIMAL_FOTO", item.fotoUrl)
+
+                startActivity(intent)
+
+            } else {
+                Toast.makeText(this, "Error: Objeto no reconocido", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        // 8. El listener de "btnIrAInsertar" se elimina
 
-        //--- LÓGICA DEL PROFE: Cargar datos (igual que tenías) ---
-        // Esta parte la dejamos igual que tu código original
-        cargarDatos()
-
-        //--- CÓDIGO BASE DEL PROFE (al final) ---
-        // 9. Asegúrate que el ID sea el del nuevo layout
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_listar_animales)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        cargarDatos(lvAnimales)
     }
 
-    /**
-     * Función privada para cargar datos
-     */
-    private fun cargarDatos() {
+    private fun cargarDatos(listView: ListView) {
         if (ValidarConexionWAN.isOnline(this)) {
-            CargarAnimalesApi.cargarAnimales(this, lvAnimales)
+            CargarAnimalesApi.cargarAnimales(this, listView)
         } else {
-            LeerAnimalesLocal.cargarEnListView(this, this, lvAnimales)
+            LeerAnimalesLocal.cargarEnListView(this, this, listView)
         }
     }
 
-    /**
-     * Sobrescribimos onResume para recargar los datos
-     * (Esto es necesario para que la lista se actualice
-     * al volver de "Insertar" o al "Eliminar")
-     */
+
     override fun onResume() {
         super.onResume()
-        cargarDatos()
+
+
+        val lvAnimales: ListView = findViewById(R.id.lv_animales_admin)
+
+        cargarDatos(lvAnimales)
     }
 }

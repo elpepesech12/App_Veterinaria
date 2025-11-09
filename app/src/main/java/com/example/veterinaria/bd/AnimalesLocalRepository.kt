@@ -8,11 +8,14 @@ import kotlinx.coroutines.withContext
 
 object AnimalesLocalRepository {
 
-    suspend fun insert(context: Context, nombre: String, fechaNac: String, fotoUrl: String?, idArea: Long): Result<Long> =
+    suspend fun insert(context: Context, nombre: String, fechaNac: String,
+                       fotoUrl: String?, idArea: Long): Result<Long> =
         withContext(Dispatchers.IO) {
             runCatching {
-                // Y faltaba pasar 'idArea' a la función del Helper
-                AnimalDbHelper(context).use { it.insert(nombre, fechaNac, fotoUrl, idArea) } // <-- MIRA AQUÍ
+
+                AnimalDbHelper(context).use {
+                    it.insert(nombre, fechaNac, fotoUrl, idArea, "M", 1L, 1L, 1L)
+                }
             }
         }
 
@@ -22,11 +25,16 @@ object AnimalesLocalRepository {
             runCatching {
                 AnimalDbHelper(context).use { db ->
                     animales.forEach { animal ->
-                        /**
-                         * ERROR 2 ESTABA AQUÍ (Línea 24)
-                         * Faltaba pasar 'animal.idArea' a la función del Helper
-                         */
-                        db.insert(animal.nombre, animal.fechaNacimiento, animal.fotoUrl, animal.idArea) // <-- MIRA AQUÍ
+                        db.insert(
+                            animal.nombre,
+                            animal.fechaNacimiento,
+                            animal.fotoUrl,
+                            animal.idArea,
+                            animal.idSexo,
+                            animal.idEspecie,
+                            animal.idHabitat,
+                            animal.idEstadoSalud
+                        )
                     }
                 }
             }

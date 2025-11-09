@@ -15,15 +15,15 @@ data class AnimalInsertRequest(
     val id_especie: Long = 1,
     val id_habitat: Long = 1,
     val id_estado_salud: Long = 1,
-    val id_area: Long = 1 // <-- ¡¡AÑADIR ESTA LÍNEA!!
+    val id_area: Long = 1,
+    val foto_url: String? = null
 )
 
 
 interface SupabaseService {
     @GET("animal")
     suspend fun getAnimales(
-        // ¡Modificar esta línea!
-        @Query("select") select: String = "id_animal,nombre,fecha_nacimiento,foto_url,id_area",
+        @Query("select") select: String = "id_animal,nombre,fecha_nacimiento,foto_url,id_area,id_sexo,id_especie,id_habitat,id_estado_salud",
         @Header("Range") range: String = "0-99"
     ): List<Animal>
 
@@ -33,10 +33,7 @@ interface SupabaseService {
         @Header("Prefer") prefer: String = "return=representation"
     ): List<Animal>
 
-    /**
-     * Pide el conteo total de animales.
-     * No devuelve cuerpo (Response<Unit>), el dato está en el header.
-     */
+
     @GET("animal")
     suspend fun getTotalAnimalesCount(
         @Header("Prefer") prefer: String = "count=exact",
@@ -65,35 +62,35 @@ interface SupabaseService {
     // - Con 1 'Veterinario' si el login es exitoso
     // - Vacía (size 0) si el login es incorrecto
 
-    @GET("sexo") // Nombre de la tabla
+    @GET("sexo")
     suspend fun getSexos(
         @Query("select") select: String = "id_sexo,descripcion"
     ): List<Sexo>
 
 
 
-    @GET("especie") // Nombre de la tabla
+    @GET("especie")
     suspend fun getEspecies(
         @Query("select") select: String = "id_especie,nombre_comun"
     ): List<Especie>
 
 
 
-    @GET("habitat") // Nombre de la tabla
+    @GET("habitat")
     suspend fun getHabitats(
         @Query("select") select: String = "id_habitat,nombre"
     ): List<Habitat>
 
 
 
-    @GET("estado_salud") // Nombre de la tabla
+    @GET("estado_salud")
     suspend fun getEstadosSalud(
         @Query("select") select: String = "id_estado_salud,estado"
     ): List<EstadoSalud>
 
 
 
-    @GET("area_animal") // <-- ¡Este es el nombre real de tu tabla!
+    @GET("area_animal") //
     suspend fun getAreas(
         @Query("select") select: String = "id_area,nombre"
     ): List<Area>
@@ -104,7 +101,6 @@ interface SupabaseService {
         @Query("limit") limit: Int = 3
     ): List<AnimalListado>
 
-    // Llama a la MISMA vista, pero sin el límite
     @GET("vista_animales_listado")
     suspend fun getAllAnimalesListado(): List<AnimalListado>
 
@@ -124,7 +120,7 @@ interface SupabaseService {
      * Obtiene las citas para el calendario.
      * Pide todas las citas entre una fecha de inicio y fin.
      */
-    @GET("cita") // <-- Llama a la tabla 'cita' (minúscula)
+    @GET("cita")
     suspend fun getCitasPorRango(
         // Pide las relaciones (joins)
         @Query("select") select: String = "id_cita,fecha,hora,animal:animal(id_animal,nombre),tipo_cita:tipo_cita(id_tipo_cita,nombre),veterinario:veterinario(id_veterinario,nombre,apellido_p,email)",
@@ -155,5 +151,30 @@ interface SupabaseService {
     suspend fun getTiposCita(
         @Query("select") select: String = "id_tipo_cita,nombre"
     ): List<TipoCitaSimple>
+
+    @GET("especie")
+    suspend fun getEspecieById(
+        @Query("id_especie") idQuery: String,
+        @Query("select") select: String = "id_especie,nombre_comun"
+    ): List<Especie>
+
+    @GET("habitat")
+    suspend fun getHabitatById(
+        @Query("id_habitat") idQuery: String,
+        @Query("select") select: String = "id_habitat,nombre"
+    ): List<Habitat>
+
+    @GET("estado_salud")
+    suspend fun getEstadoById(
+        @Query("id_estado_salud") idQuery: String,
+        @Query("select") select: String = "id_estado_salud,estado"
+    ): List<EstadoSalud>
+
+    @GET("area_animal")
+    suspend fun getAreaById(
+        @Query("id_area") idQuery: String,
+        @Query("select") select: String = "id_area,nombre"
+    ): List<Area>
 }
+
 

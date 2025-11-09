@@ -38,15 +38,12 @@ import java.util.Locale
 
 class CitasVet : Fragment() {
 
-    // --- Variables que el Calendario NECESITA compartir ---
-    // (Estas deben estar afuera para que el 'dayBinder' las vea)
     private var diaSeleccionado: LocalDate? = null
     private val hoy = LocalDate.now()
     private val listaMaestraDeCitas = mutableListOf<CitaUI>()
     private var diasConCitas = setOf<LocalDate>()
-    private var adapterCitas: CitasAdapter? = null // La haremos nulleable, como te gusta
+    private var adapterCitas: CitasAdapter? = null
 
-    // Formateadores de fecha (útiles)
     private val formateadorTitulo = DateTimeFormatter.ofPattern("d 'de' MMMM", Locale("es", "ES"))
     private val formateadorMes = DateTimeFormatter.ofPattern("MMMM yyyy", Locale("es", "ES"))
 
@@ -103,8 +100,7 @@ class CitasVet : Fragment() {
             filtrarCitasParaDia(fecha)
         }
 
-        // Clase interna para el "molde" de cada día
-        // (Esta SÍ tiene que ser 'inner class' para acceder a 'diaSeleccionado')
+
         class ContenedorDia(view: View) : ViewContainer(view) {
             val txtDia = view.findViewById<TextView>(R.id.txt_dia_calendario)
             val vistaPunto = view.findViewById<View>(R.id.vista_punto_cita)
@@ -129,7 +125,6 @@ class CitasVet : Fragment() {
         }
 
         fun setupCalendario() {
-            // Config 1: El Binder (conecta datos al layout del día)
             calendarioVista.dayBinder = object : MonthDayBinder<ContenedorDia> {
                 override fun create(view: View) = ContenedorDia(view)
 
@@ -151,8 +146,7 @@ class CitasVet : Fragment() {
                             }
                             hoy -> {
                                 vistaSeleccionado.isVisible = false
-                                // ¡OJO! Asegúrate de tener este color en 'colors.xml'
-                                // Si no, cámbialo por: android.R.color.holo_blue_dark
+
                                 txtDia.setTextColor(resources.getColor(com.google.android.material.R.color.design_default_color_primary))
                             }
                             else -> {
@@ -169,7 +163,6 @@ class CitasVet : Fragment() {
                 }
             }
 
-            // Config 2: Rango del Calendario
             val mesActual = YearMonth.now()
             val primerMes = mesActual.minusMonths(6)
             val ultimoMes = mesActual.plusMonths(6)
@@ -178,7 +171,6 @@ class CitasVet : Fragment() {
             calendarioVista.setup(primerMes, ultimoMes, primerDiaSemana)
             calendarioVista.scrollToMonth(mesActual)
 
-            // Config 3: Títulos (Dom, Lun, Mar...)
             val diasSemana = daysOfWeek(firstDayOfWeek = primerDiaSemana)
             (layoutDiasSemana.children as Sequence<TextView>).forEachIndexed { index, textView ->
                 val dia = diasSemana[index]
@@ -186,7 +178,6 @@ class CitasVet : Fragment() {
                 textView.text = nombre
             }
 
-            // Config 4: Listener de Scroll (para cambiar "Noviembre 2025")
             calendarioVista.monthScrollListener = object : MonthScrollListener {
                 override fun invoke(month: CalendarMonth) {
                     txtMesCalendario.text = month.yearMonth.format(formateadorMes).replaceFirstChar { it.uppercase() }
@@ -220,7 +211,6 @@ class CitasVet : Fragment() {
 
                         calendarioVista.notifyCalendarChanged()
 
-                        // Seleccionamos HOY al cargar
                         seleccionarDia(hoy)
 
                     } else {
@@ -232,12 +222,10 @@ class CitasVet : Fragment() {
             }
         }
 
-        fabAgregarCita.setOnClickListener { // <-- ¡LÍNEA 3: EL LISTENER!
-            // Esta es tu lógica, copiada de HomeVet
+        fabAgregarCita.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                // OJO: Asegúrate que el ID (R.id.fragment_container) sea el
-                //      ID del FrameLayout que está en tu Activity (InicioVet)
-                .replace(R.id.fragment_container, AgregarCita()) // <-- ¡LÍNEA 4: LA ACCIÓN!
+
+                .replace(R.id.fragment_container, AgregarCita())
                 .addToBackStack(null) // Permite volver atrás
                 .commit()
         }

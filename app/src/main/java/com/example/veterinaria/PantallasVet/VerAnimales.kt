@@ -44,7 +44,6 @@ class VerAnimales : Fragment() {
                 return
             }
             viewLifecycleOwner.lifecycleScope.launch {
-                // ¡Llama a la NUEVA función que trae TODOS!
                 val animalesResult = VeterinariaRepository.fetchAllAnimalesListado()
 
                 animalesResult.onSuccess { listaDeAnimales ->

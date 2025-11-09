@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.veterinaria">
-    <!-- PAQUETE BASE -->
-    <!-- PERMISO ACCESO A INTERNET -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- PERMISO ACCESO A ESTADO DE LA CONEXION A INTERNET -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- PERMISOS DE CÁMARA Y ALMACENAMIENTO (Como el profe) -->
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
 
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
@@ -28,6 +28,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Veterinaria"
         tools:targetApi="31">
+
+        <activity
+            android:name=".DetalleAnimalActivity"
+            android:exported="false" />
         <activity
             android:name=".AdminMenuActivity"
             android:exported="false" />
@@ -37,15 +41,16 @@
         <activity
             android:name=".ListarAnimalesActivity"
             android:exported="false" />
+
         <activity
             android:name=".InicioVet"
             android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

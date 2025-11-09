@@ -39,7 +39,6 @@ class AdminMenuActivity : AppCompatActivity() {
         }
 
         btnAgregarAnimal.setOnClickListener {
-            // 2. Abre el formulario para insertar
             val nuevaVentana = Intent(this, InsertarAnimalActivity::class.java)
             startActivity(nuevaVentana)
         }

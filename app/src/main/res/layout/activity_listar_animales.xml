@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#F9F9F9"
     android:padding="16dp"
     tools:context=".ListarAnimalesActivity">
 
@@ -13,20 +14,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Listado de Animales"
-        android:textSize="20sp" />
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="16dp"/>
 
     <ListView
         android:id="@+id/lv_animales_admin"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:background="@android:color/transparent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="8dp"
+        android:scrollbars="vertical"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_volver_al_menu"
+        style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
         android:text="Volver al Menú" />
 
 </LinearLayout>

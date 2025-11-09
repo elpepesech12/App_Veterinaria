@@ -24,9 +24,7 @@ class AlertasAdapter(
         val txtArea: TextView = itemView.findViewById(R.id.txt_alerta_area)
     }
 
-    // Se llama cuando se necesita crear un nuevo ViewHolder (fila)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlertaViewHolder {
-        // (Asegúrate de tener un 'item_alerta.xml' en tu layout)
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_alerta, parent, false)
         return AlertaViewHolder(view)
@@ -40,18 +38,12 @@ class AlertasAdapter(
         val alerta = alertas[position]
         val context = holder.itemView.context
 
-        // Seteamos textos
         holder.txtTitulo.text = alerta.titulo
         holder.txtDescripcion.text = alerta.descripcion
-        holder.txtArea.text = alerta.area.nombre // <-- Viene del Join
+        holder.txtArea.text = alerta.area.nombre
 
-        // Por ahora, mostramos la fecha y hora
         holder.txtTimestamp.text = "${alerta.fecha} - ${alerta.hora.substring(0, 5)}"
 
-
-        // Lógica para el Tag e Icono
-        // La UI de tu screenshot tiene lógica basada en el TÍTULO,
-        // no solo en el TIPO (ej: "Éxito" y "Info" son ambos "Informativo" en la DB)
 
         val tipoAlerta = alerta.tipoAlerta.nombre.lowercase()
 

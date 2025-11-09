@@ -1,113 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_insertar_animal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:background="#F9F9F9"
+    tools:context=".InsertarAnimalActivity">
 
-    <LinearLayout
-        android:id="@+id/main_insertar_animal"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/btn_volver_menu_insertar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_arrow_back"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Volver"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tx_insertar_titulo"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        tools:context=".InsertarAnimalActivity">
+        android:text="Agregar Nuevo Animal"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/btn_volver_menu_insertar"
+        app:layout_constraintTop_toTopOf="@id/btn_volver_menu_insertar"
+        app:layout_constraintBottom_toBottomOf="@id/btn_volver_menu_insertar"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nombre:" />
-        <EditText
-            android:id="@+id/ed_animal_nombre"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_volver_menu_insertar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Ej: Simba"
-            android:inputType="textCapWords"
-            android:layout_marginBottom="8dp"/>
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fecha Nacimiento (AAAA-MM-DD):" />
-        <EditText
-            android:id="@+id/ed_animal_fecha_nac"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ej: 2024-01-15"
-            android:inputType="date"
-            android:layout_marginBottom="16dp"/>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sexo:" />
-        <Spinner
-            android:id="@+id/sp_animal_sexo"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="8dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Información Básica"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="16dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Especie:" />
-        <Spinner
-            android:id="@+id/sp_animal_especie"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="8dp"/>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nombre">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/ed_animal_nombre"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapWords" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hábitat:" />
-        <Spinner
-            android:id="@+id/sp_animal_habitat"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="8dp"/>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:hint="Fecha Nacimiento (AAAA-MM-DD)">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/ed_animal_fecha_nac"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="date" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Estado de Salud:" />
-        <Spinner
-            android:id="@+id/sp_animal_estado"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="8dp"/>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Área:" />
-        <Spinner
-            android:id="@+id/sp_animal_area"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="16dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Clasificación"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="16dp"/>
 
-        <Button
-            android:id="@+id/btn_insertar_animal_api"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Insertar (API)" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sexo:" />
+                    <Spinner
+                        android:id="@+id/sp_animal_sexo"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="8dp"/>
 
-        <Button
-            android:id="@+id/btn_insertar_animal_local"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Insertar (Local)" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Especie:" />
+                    <Spinner
+                        android:id="@+id/sp_animal_especie"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="8dp"/>
 
-        <Button
-            android:id="@+id/btn_volver_menu_insertar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Volver al Menú"
-            style="?android:attr/buttonBarButtonStyle"
-            android:textColor="@color/design_default_color_error"
-            android:layout_marginTop="16dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hábitat:" />
+                    <Spinner
+                        android:id="@+id/sp_animal_habitat"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="8dp"/>
 
-    </LinearLayout>
-</ScrollView>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Estado de Salud:" />
+                    <Spinner
+                        android:id="@+id/sp_animal_estado"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="8dp"/>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Área:" />
+                    <Spinner
+                        android:id="@+id/sp_animal_area"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fotografía"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="16dp"/>
+
+                    <androidx.camera.view.PreviewView
+                        android:id="@+id/preview_view_animal"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:background="#EEE" />
+
+                    <Button
+                        android:id="@+id/btn_tomar_foto_animal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tomar Foto"
+                        android:layout_marginTop="8dp"/>
+
+                    <ImageView
+                        android:id="@+id/img_foto_capturada"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8dp"
+                        android:scaleType="centerCrop"
+                        android:background="#DDD"
+                        android:contentDescription="Foto capturada" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <Button
+                android:id="@+id/btn_insertar_animal_api"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Guardar (API)"
+                android:layout_marginTop="32dp"/>
+
+            <Button
+                android:id="@+id/btn_insertar_animal_local"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Guardar (Local)"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

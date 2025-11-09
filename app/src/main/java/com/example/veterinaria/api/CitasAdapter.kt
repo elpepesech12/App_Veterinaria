@@ -33,9 +33,6 @@ class CitasAdapter(
         holder.txtTitulo.text = cita.tipoCita.nombre
         holder.txtAnimal.text = "con ${cita.animal.nombre}"
 
-        // Asumiendo que el Dr. 1 es Carlos Gómez.
-        // ¡Aquí deberías tener la info del veterinario LOGUEADO!
-        // Por ahora, lo mostramos desde la cita.
         holder.txtVeterinario.text = "Dr. ${cita.veterinario.nombre}"
     }
 

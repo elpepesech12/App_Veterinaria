@@ -20,16 +20,5 @@ class RegistrosVet : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Aquí es donde pones tus findViewById y la lógica de la pantalla.
-
-        // Ejemplo:
-        // val textoBienvenida = view.findViewById<TextView>(R.id.texto_bienvenida_home)
-        // val botonVerMascotas = view.findViewById<Button>(R.id.boton_ver_mascotas)
-
-        // textoBienvenida.text = "¡Bienvenido a tu veterinaria!"
-
-        // botonVerMascotas.setOnClickListener {
-        //    // Hacer algo al presionar el botón
-        // }
     }
 }

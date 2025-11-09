@@ -20,15 +20,10 @@ object CargarAnimalesApi {
                     Toast.makeText(listView.context, "Sin datos desde Supabase", Toast.LENGTH_SHORT).show()
                 }
 
-                val datos = animales.map { a ->
-                    "NOMBRE: ${a.nombre}\n" +
-                            "NAC: ${a.fechaNacimiento}"
-                }
-
                 listView.adapter = ArrayAdapter(
                     listView.context,
                     android.R.layout.simple_list_item_1,
-                    datos
+                    animales
                 )
 
                 AnimalesLocalRepository.clear(listView.context).onSuccess {

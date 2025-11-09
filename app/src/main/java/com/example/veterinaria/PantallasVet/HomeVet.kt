@@ -37,13 +37,9 @@ class HomeVet : Fragment() {
         var animalesAdapter: AnimalesAdapter? = null
 
         fun setupRecyclerView() {
-            // 1. Inicializa el adapter (ahora sí le da un valor)
             animalesAdapter = AnimalesAdapter(emptyList())
-            // 2. Le dice al RecyclerView que use un layout vertical
             rvAnimales.layoutManager = LinearLayoutManager(requireContext())
-            // 3. Asigna el adapter al RecyclerView
             rvAnimales.adapter = animalesAdapter
-            // 4. (Para el scroll)
             rvAnimales.isNestedScrollingEnabled = false
         }
 
@@ -54,8 +50,7 @@ class HomeVet : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 val animalesResult = VeterinariaRepository.fetchAnimalesDashboard()
                 animalesResult.onSuccess { listaDeAnimales ->
-                    // Usamos 'animalesAdapter?.' (safe call)
-                    // por si acaso 'cargarAnimales' se llamara antes que 'setupRecyclerView'
+
                     animalesAdapter?.updateData(listaDeAnimales)
                 }.onFailure { e ->
                     Toast.makeText(requireContext(), "Error Animales: ${e.message}", Toast.LENGTH_LONG).show()
@@ -88,7 +83,6 @@ class HomeVet : Fragment() {
         cargarDatosDashboard()
 
         txtVerTodos.setOnClickListener {
-            // 'parentFragmentManager' es el "controlador" de fragmentos de la Activity
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, VerAnimales())
                 .addToBackStack(null) // Permite volver atrás con el botón del teléfono

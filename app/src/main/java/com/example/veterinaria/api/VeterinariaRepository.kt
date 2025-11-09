@@ -69,7 +69,6 @@ object VeterinariaRepository {
     //FUNCION PARA EL LOGIN DEL VET
     suspend fun login(email: String, pass: String): Result<Veterinario> = withContext(Dispatchers.IO) {
         try {
-            // Añadimos el "eq." (equals) que pide Supabase
             val emailQuery = "eq.$email"
             val passQuery = "eq.$pass"
 
@@ -100,10 +99,8 @@ object VeterinariaRepository {
         }
     }
 
-    // --- ¡AÑADE ESTA NUEVA FUNCIÓN! ---
     suspend fun fetchAllAnimalesListado(): Result<List<AnimalListado>> = withContext(Dispatchers.IO) {
         try {
-            // Llama a la función que trae TODOS los animales (sin límite)
             Result.success(SupabaseClient.service.getAllAnimalesListado())
         } catch (e: Exception) {
             Result.failure(e)
@@ -184,12 +181,7 @@ object VeterinariaRepository {
 
     suspend fun fetchAnimalesParaSpinner(): Result<List<AnimalSimple>> = withContext(Dispatchers.IO) {
         try {
-            // Asegúrate de tener esta función en tu SupabaseService.kt
-            // @GET("animal?select=id_animal,nombre")
-            // suspend fun getAnimalesSimples(): List<AnimalSimple>
 
-            // --- Solución Rápida (si no quieres cambiar el service) ---
-            // Reutilizamos la función getAnimales que ya tenías
             val animalesCompletos = SupabaseClient.service.getAnimales()
             val animalesSimples = animalesCompletos.map {
                 AnimalSimple(id = it.id, nombre = it.nombre)
@@ -203,11 +195,7 @@ object VeterinariaRepository {
 
     suspend fun fetchTiposCita(): Result<List<TipoCitaSimple>> = withContext(Dispatchers.IO) {
         try {
-            // ¡OJO! Esta función debe existir en tu SupabaseService.kt:
-            // @GET("tipo_cita?select=id_tipo_cita,nombre")
-            // suspend fun getTiposCita(): List<TipoCitaSimple>
 
-            // Si no la tienes, añádela a SupabaseService.kt
             Result.success(SupabaseClient.service.getTiposCita())
         } catch (e: Exception) {
             Result.failure(e)
@@ -217,12 +205,43 @@ object VeterinariaRepository {
     suspend fun insertCita(request: InsertarCita): Result<CitaUI> = withContext(Dispatchers.IO) {
         try {
             val responseList = SupabaseClient.service.insertCita(request)
-            // La API devuelve una lista, pero solo queremos el primer item
             responseList.firstOrNull()?.let {
                 Result.success(it)
             } ?: Result.failure(Exception("La API no devolvió la cita creada"))
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    suspend fun fetchEspecieById(id: Long): Result<Especie> = withContext(Dispatchers.IO) {
+        try {
+            val lista = SupabaseClient.service.getEspecieById("eq.$id")
+            lista.firstOrNull()?.let { Result.success(it) }
+                ?: Result.failure(Exception("No se encontró Especie con ID $id"))
+        } catch (e: Exception) { Result.failure(e) }
+    }
+
+    suspend fun fetchHabitatById(id: Long): Result<Habitat> = withContext(Dispatchers.IO) {
+        try {
+            val lista = SupabaseClient.service.getHabitatById("eq.$id")
+            lista.firstOrNull()?.let { Result.success(it) }
+                ?: Result.failure(Exception("No se encontró Hábitat con ID $id"))
+        } catch (e: Exception) { Result.failure(e) }
+    }
+
+    suspend fun fetchEstadoById(id: Long): Result<EstadoSalud> = withContext(Dispatchers.IO) {
+        try {
+            val lista = SupabaseClient.service.getEstadoById("eq.$id")
+            lista.firstOrNull()?.let { Result.success(it) }
+                ?: Result.failure(Exception("No se encontró Estado con ID $id"))
+        } catch (e: Exception) { Result.failure(e) }
+    }
+
+    suspend fun fetchAreaById(id: Long): Result<Area> = withContext(Dispatchers.IO) {
+        try {
+            val lista = SupabaseClient.service.getAreaById("eq.$id")
+            lista.firstOrNull()?.let { Result.success(it) }
+                ?: Result.failure(Exception("No se encontró Área con ID $id"))
+        } catch (e: Exception) { Result.failure(e) }
     }
 }

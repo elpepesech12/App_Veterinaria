@@ -11,7 +11,6 @@ object InsertarAnimalAPI {
     fun insertarAnimal(
         owner: LifecycleOwner,
         context: Context,
-        // --- ¡¡TODOS LOS NUEVOS PARÁMETROS!! ---
         nombre: String,
         fechaNac: String,
         idSexo: String,
@@ -19,7 +18,7 @@ object InsertarAnimalAPI {
         idHabitat: Long,
         idEstado: Long,
         idArea: Long,
-        // -- Callbacks
+        fotoBase64: String?,
         onSuccess: ((String) -> Unit)? = null,
         onError: ((Throwable) -> Unit)? = null
     ) {
@@ -31,11 +30,11 @@ object InsertarAnimalAPI {
             id_especie = idEspecie,
             id_habitat = idHabitat,
             id_estado_salud = idEstado,
-            id_area = idArea
+            id_area = idArea,
+            foto_url = fotoBase64
         )
 
         owner.lifecycleScope.launch {
-            // Usamos la función del Repositorio (no necesita cambios)
             val res = VeterinariaRepository.insertAnimal(request)
             res.onSuccess { animalesInsertados ->
                 val nombreAnimal = animalesInsertados.firstOrNull()?.nombre ?: "Animal"

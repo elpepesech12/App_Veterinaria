@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        //--- Verificación de Conexión ---
         if (ValidarConexionWAN.isOnline(this)) {
             Log.d("LOGIN", "Dispositivo conectado a internet.")
         } else {
@@ -45,20 +44,16 @@ class MainActivity : AppCompatActivity() {
             val userEmail = edUsuario.text.toString().trim()
             val pass = edPassword.text.toString().trim()
 
-            // 1. Check de Admin
             if (userEmail == adminUser && pass == adminPass) {
-                // ROL ADMIN
                 val intent = Intent(this, AdminMenuActivity::class.java)
                 intent.putExtra("sesion", userEmail)
                 startActivity(intent)
                 Toast.makeText(this, "Bienvenido Admin: $userEmail", Toast.LENGTH_SHORT).show()
                 txMensaje.text = "login OK"
             } else {
-                // ROL VETERINARIO
                 btnLogin.isEnabled = false
                 txMensaje.text = "Validando..."
 
-                // Usamos una corrutina para llamar a la API
                 lifecycleScope.launch {
                     val loginResult = VeterinariaRepository.login(userEmail, pass)
 
@@ -67,12 +62,10 @@ class MainActivity : AppCompatActivity() {
                         txMensaje.text = "login VET OK"
                         Toast.makeText(this@MainActivity, "Bienvenido Dr. ${veterinario.nombre}", Toast.LENGTH_SHORT).show()
 
-                        // Guardamos el ID y nombre del veterinario en SharedPreferences
                         SesionManager.saveLogin(this@MainActivity, veterinario)
 
                         val intent = Intent(this@MainActivity, InicioVet::class.java)
 
-                        // Enviamos los datos del veterinario a la siguiente pantalla
                         intent.putExtra("ID_VET", veterinario.id)
                         intent.putExtra("NOMBRE_VET", veterinario.nombre)
 
@@ -83,7 +76,6 @@ class MainActivity : AppCompatActivity() {
                         txMensaje.text = "login NO"
                     }
 
-                    // 3. Vuelve a habilitar el botón (ya sea si falló o fue exitoso)
                     btnLogin.isEnabled = true
                 }
             }
