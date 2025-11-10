@@ -36,7 +36,7 @@ class DetalleAnimalActivity : AppCompatActivity() {
             finish()
         }
 
-        // --- Cargar Datos
+        // cargar datos
         val animalId = intent.getLongExtra("ANIMAL_ID", 0L)
         val animalNombre = intent.getStringExtra("ANIMAL_NOMBRE")
         val animalFecha = intent.getStringExtra("ANIMAL_FECHA")
@@ -64,9 +64,9 @@ class DetalleAnimalActivity : AppCompatActivity() {
             Log.w("DetalleAnimal", "No se pudo cargar la foto o es nula")
         }
 
-        // buscar nombres de ID
+        // buscar nombres de id
         if (ValidarConexionWAN.isOnline(this)) {
-            // Ponemos un placeholder mientras carga
+            // ponemos un placeholder mientras carga
             tx_detalle_estado.text = "Estado: (Cargando...)"
             tx_detalle_especie.text = "Especie: (Cargando...)"
             tx_detalle_habitat.text = "Hábitat: (Cargando...)"

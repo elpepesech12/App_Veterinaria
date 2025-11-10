@@ -15,7 +15,7 @@ class AnimalesAdapter(
     private var animales: List<AnimalListado>
 ) : RecyclerView.Adapter<AnimalesAdapter.AnimalViewHolder>() {
 
-    // 1. ViewHolder: "Sostiene" las vistas de un solo item
+    // ViewHolder "sostiene" las vistas de un solo item
     inner class AnimalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgAnimal: ImageView = itemView.findViewById(R.id.img_animal)
         val txtNombre: TextView = itemView.findViewById(R.id.txt_animal_nombre)
@@ -25,35 +25,35 @@ class AnimalesAdapter(
         val txtArea: TextView = itemView.findViewById(R.id.txt_animal_area)
     }
 
-    // 2. Se llama cuando se necesita crear un nuevo ViewHolder (fila)
+    // se llama cuando se necesita crear un nuevo ViewHolder (fila)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimalViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_animal, parent, false) // Usa el nuevo item_animal.xml
         return AnimalViewHolder(view)
     }
 
-    // 3. Devuelve la cantidad de items
+    // devuelve la cantidad de items
     override fun getItemCount(): Int = animales.size
 
-    // 4. El corazón: Conecta los datos (AnimalListado) con las vistas (ViewHolder)
+    // conecta los datos (AnimalListado) con las vistas (ViewHolder)
     override fun onBindViewHolder(holder: AnimalViewHolder, position: Int) {
         val animal = animales[position]
         val context = holder.itemView.context
 
-        // Seteamos textos
+        // seteamos textos
         holder.txtNombre.text = animal.nombre
         holder.txtEspecie.text = animal.especie
         holder.txtEdad.text = "${animal.edad ?: '?'} años"
         holder.txtArea.text = animal.area
 
-        // Cargar imagen con Coil
-        // (Usará la URL de Supabase Storage que guardaste en la columna foto_url)
+        // cargar imagen con coil
+        // (se usa la url de supabase storage que guardaste en la columna foto_url)
         holder.imgAnimal.load(animal.fotoUrl) {
-            placeholder(R.drawable.ic_pulso) // Una imagen de "cargando"
+            placeholder(R.drawable.ic_pulso)
             error(R.drawable.ic_error)
         }
 
-        // Lógica para el Tag de Estado
+        // lógica para el tag de estado
         holder.txtEstado.text = animal.estado
         when (animal.estado.lowercase()) { // "Saludable", "Crítico", etc.
             "saludable" -> {
@@ -68,16 +68,16 @@ class AnimalesAdapter(
                 holder.txtEstado.background = ContextCompat.getDrawable(context, R.drawable.bg_tag_monitoreo)
                 holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.black))
             }
-            else -> { // Un color por defecto si no coincide
+            else -> {
                 holder.txtEstado.background = ContextCompat.getDrawable(context, R.drawable.bg_tag_monitoreo)
                 holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.black))
             }
         }
     }
 
-    // 5. Función para actualizar la lista desde el Fragment
+    // función para actualizar la lista desde el fragment
     fun updateData(nuevosAnimales: List<AnimalListado>) {
         this.animales = nuevosAnimales
-        notifyDataSetChanged() // Refresca la lista
+        notifyDataSetChanged() // refresca la lista
     }
 }

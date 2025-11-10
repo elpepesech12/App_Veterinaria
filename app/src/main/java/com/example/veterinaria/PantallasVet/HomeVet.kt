@@ -1,5 +1,6 @@
 package com.example.veterinaria.PantallasVet
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,7 +12,9 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.veterinaria.MainActivity
 import com.example.veterinaria.R
+import com.example.veterinaria.api.SesionManager
 import com.example.veterinaria.api.VeterinariaRepository
 import com.example.veterinaria.funciones.ValidarConexionWAN
 import com.example.veterinaria.funciones.veterinario.AnimalesAdapter
@@ -33,7 +36,7 @@ class HomeVet : Fragment() {
         val txtStatCriticos : TextView = view.findViewById(R.id.txt_stat_criticos)
         val txtVerTodos : TextView = view.findViewById(R.id.txt_ver_todos)
         val rvAnimales : RecyclerView = view.findViewById(R.id.rv_animales)
-        val btnAjustes: ImageButton = view.findViewById(R.id.btn_ajustes)
+        val btnCerrarSesion: ImageButton = view.findViewById(R.id.btn_cerrar_sesion)
         var animalesAdapter: AnimalesAdapter? = null
 
         fun setupRecyclerView() {
@@ -89,10 +92,14 @@ class HomeVet : Fragment() {
                 .commit()
         }
 
-        //PARA PROBAR EL BTN AJUSTES
-        btnAjustes.setOnClickListener {
-            // 'requireContext()' se usa en Fragments en lugar de 'this'
-            Toast.makeText(requireContext(), "Clic en Ajustes", Toast.LENGTH_SHORT).show()
+        btnCerrarSesion.setOnClickListener {
+            SesionManager.clearLogin(requireContext())
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            // para que el usuario no pueda "volver" atrás al home
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            // cierra la cctivity actual (InicioVet) donde vive este fragment
+            requireActivity().finish()
         }
     }
 }

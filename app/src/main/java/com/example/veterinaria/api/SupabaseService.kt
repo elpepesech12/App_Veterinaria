@@ -41,9 +41,9 @@ interface SupabaseService {
     ): Response<Unit>
 
     /**
-     * Pide el conteo de animales críticos (id_estado_salud = 4)
+     * pide el conteo de animales críticos (id_estado_salud = 4)
      */
-    @GET("animal?id_estado_salud=eq.4") // Filtro de Supabase
+    @GET("animal?id_estado_salud=eq.4") // filtro de Supabase
     suspend fun getCriticosAnimalesCount(
         @Header("Prefer") prefer: String = "count=exact",
         @Header("Range") range: String = "0-0"
@@ -52,15 +52,15 @@ interface SupabaseService {
     //PARA HACER EL LOGIN DEL VETERINARIO
     @GET("veterinario")
     suspend fun loginVeterinario(
-        @Query("email") email: String,     // ej: "eq.c.gomez@zoovet.cl"
-        @Query("password") password: String, // ej: "eq.vet1"
+        @Query("email") email: String,     // "c.gomez@zoovet.cl"
+        @Query("password") password: String, // "vet1"
 
-        // Pedimos solo los datos que coinciden con el data class 'Veterinario'
+        // pedimos solo los datos que coinciden con el data class 'veterinario'
         @Query("select") select: String = "id_veterinario,nombre,apellido_p,email"
     ): List<Veterinario>
-    // Devuelve una lista:
-    // - Con 1 'Veterinario' si el login es exitoso
-    // - Vacía (size 0) si el login es incorrecto
+    // devuelve una lista
+    // 1 si el login es exitoso
+    // vacia (0) si el login es incorrecto
 
     @GET("sexo")
     suspend fun getSexos(
@@ -90,7 +90,7 @@ interface SupabaseService {
 
 
 
-    @GET("area_animal") //
+    @GET("area_animal")
     suspend fun getAreas(
         @Query("select") select: String = "id_area,nombre"
     ): List<Area>
@@ -106,32 +106,31 @@ interface SupabaseService {
 
 
     /**
-     * Obtiene TODAS las alertas para la pantalla de Alertas
-     * Ordenadas por fecha y hora (más nuevas primero)
+     * bbtiene TODAS las alertas para la pantalla de alertas
+     * ordenadas por fecha y hora (más nuevas primero)
      */
     @GET("alerta")
     suspend fun getAlertas(
         @Query("select") select: String = "titulo,descripcion,fecha,hora,tipo_alerta:tipo_alerta(id_tipo_alerta,nombre_tipo),area:area_animal(id_area,nombre)",
-        // Ordena por fecha descendente, y luego por hora descendente
+        // ordena por fecha descendente, y luego por hora descendente
         @Query("order") order: String = "fecha.desc,hora.desc"
     ): List<AlertaUI>
 
     /**
-     * Obtiene las citas para el calendario.
-     * Pide todas las citas entre una fecha de inicio y fin.
+     * obtiene las citas para el calendario
+     * pide todas las citas entre una fecha de inicio y fin
      */
     @GET("cita")
     suspend fun getCitasPorRango(
-        // Pide las relaciones (joins)
         @Query("select") select: String = "id_cita,fecha,hora,animal:animal(id_animal,nombre),tipo_cita:tipo_cita(id_tipo_cita,nombre),veterinario:veterinario(id_veterinario,nombre,apellido_p,email)",
 
-        // Filtro de fecha "mayor o igual que"
+        // filtro de fecha "mayor o igual que"
         @Query("fecha") gte: String, // "gte.2025-05-01"
 
-        // Filtro de fecha "menor o igual que"
+        // filtro de fecha "menor o igual que"
         @Query("fecha") lte: String, // "lte.2026-05-01"
 
-        // Ordena por fecha y hora
+        // prdena por fecha y hora
         @Query("order") order: String = "fecha.asc,hora.asc"
 
     ): List<CitaUI>
@@ -139,10 +138,10 @@ interface SupabaseService {
     @POST("cita")
     suspend fun insertCita(
         @Body request: InsertarCita,
-        // Pedimos que nos devuelva el objeto creado
+        // pedimos que nos devuelva el objeto creado
         @Header("Prefer") prefer: String = "return=representation",
 
-        // Le dice a Supabase que la respuesta SÍ incluya los joins
+        // le dice a supabase que la respuesta si incluya los joins
         @Query("select") select: String = "id_cita,fecha,hora,animal:animal(id_animal,nombre),tipo_cita:tipo_cita(id_tipo_cita,nombre),veterinario:veterinario(id_veterinario,nombre,apellido_p,email)"
 
     ): List<CitaUI>

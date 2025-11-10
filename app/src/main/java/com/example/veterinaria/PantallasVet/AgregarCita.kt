@@ -60,7 +60,7 @@ class AgregarCita : Fragment() {
         fun cargarDatosSpinners() {
             progressBar.isVisible = true
             lifecycleScope.launch {
-                // Cargar Animales
+                // cargar animales
                 val resultAnimales = VeterinariaRepository.fetchAnimalesParaSpinner()
                 resultAnimales.onSuccess { animales ->
                     listaAnimales = animales // Guarda la lista
@@ -72,10 +72,10 @@ class AgregarCita : Fragment() {
                 }
 
 
-                // Cargar Tipos de Cita
+                // cargar tipos de cita
                 val resultTiposCita = VeterinariaRepository.fetchTiposCita()
                 resultTiposCita.onSuccess { tipos ->
-                    listaTiposCita = tipos // Guarda la lista
+                    listaTiposCita = tipos // guarda la lista
                     val nombresTiposCita = tipos.map { it.nombre }
                     val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, nombresTiposCita)
                     spinnerTipoCita.setAdapter(adapter)
@@ -89,12 +89,10 @@ class AgregarCita : Fragment() {
 
         fun setupSpinners() {
             spinnerAnimal.setOnItemClickListener { parent, view, position, id ->
-                // Cuando el usuario selecciona, guardamos el ID
                 animalSeleccionadoId = listaAnimales[position].id
             }
 
             spinnerTipoCita.setOnItemClickListener { parent, view, position, id ->
-                // Cuando el usuario selecciona, guardamos el ID
                 tipoCitaSeleccionadoId = listaTiposCita[position].id
             }
         }
@@ -102,17 +100,17 @@ class AgregarCita : Fragment() {
         fun setupDateTimePickers() {
             val calendario = Calendar.getInstance()
 
-            // --- Selector de Fecha ---
+            // --- selector de fecha ---
             val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                 calendario.set(Calendar.YEAR, year)
                 calendario.set(Calendar.MONTH, month)
                 calendario.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                // Formato para mostrar al usuario (ej: 09/11/2025)
+                // formato para mostrar al usuario (ej: 09/11/2025)
                 val formatoVista = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 inputFecha.setText(formatoVista.format(calendario.time))
 
-                // Formato para enviar a la API (ej: 2025-11-09)
+                // formato para enviar a la api (ej: 2025-11-09)
                 val formatoAPI = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 fechaSeleccionadaApi = formatoAPI.format(calendario.time)
             }
@@ -127,16 +125,16 @@ class AgregarCita : Fragment() {
                 ).show()
             }
 
-            // --- Selector de Hora ---
+            // --- selector de hora ---
             val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                 calendario.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 calendario.set(Calendar.MINUTE, minute)
 
-                // Formato para mostrar al usuario (ej: 14:30)
+                // formato para mostrar al usuario (ej: 14:30)
                 val formatoVista = SimpleDateFormat("HH:mm", Locale.getDefault())
                 inputHora.setText(formatoVista.format(calendario.time))
 
-                // Formato para enviar a la API (ej: 14:30:00)
+                // formato para enviar a la API (ej: 14:30:00)
                 val formatoAPI = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
                 horaSeleccionadaApi = formatoAPI.format(calendario.time)
             }
@@ -153,7 +151,7 @@ class AgregarCita : Fragment() {
         }
 
         /**
-         * Valida que todos los campos estén llenos
+         * valida que todos los campos estén llenos
          */
         fun validarFormulario(): Boolean {
             if (animalSeleccionadoId == null) {
@@ -176,7 +174,7 @@ class AgregarCita : Fragment() {
                 inputHora.error = "Requerido"
                 return false
             }
-            // Limpiamos errores
+            // limpiamos errores
             spinnerAnimal.error = null
             spinnerTipoCita.error = null
             inputFecha.error = null
@@ -185,7 +183,7 @@ class AgregarCita : Fragment() {
         }
 
         /**
-         * Llama al Repositorio para guardar la cita en la API
+         * llama al repositorio para guardar la cita en la api
          */
         fun enviarCita(cita: InsertarCita) {
             progressBar.isVisible = true
@@ -196,7 +194,7 @@ class AgregarCita : Fragment() {
                     val resultado = VeterinariaRepository.insertCita(cita)
                     resultado.onSuccess { citaCreada ->
                         Toast.makeText(context, "¡Cita creada con éxito!", Toast.LENGTH_LONG).show()
-                        // Volvemos a la pantalla anterior (el calendario)
+                        // volvemos a la pantalla anterior (el calendario)
                         findNavController().popBackStack()
                     }.onFailure {
                         Log.e("AgregarCita", "Error al guardar: ${it.message}")
@@ -213,21 +211,21 @@ class AgregarCita : Fragment() {
         }
 
         /**
-         * Configura el listener del botón de guardar
+         * configura el listener del botón de guardar
          */
         fun setupBotonGuardar() {
             btnGuardar.setOnClickListener {
-                // Validar
+                // se valida
                 if (!validarFormulario()) return@setOnClickListener
 
-                // Obtener ID del veterinario de la sesión
+                // se obtiene el id del veterinario de la sesión
                 val idVeterinarioLogueado = SesionManager.getVeterinarioId(requireContext())
                 if (idVeterinarioLogueado == -1L) {
                     Toast.makeText(context, "Error fatal: No se encontró sesión de veterinario.", Toast.LENGTH_LONG).show()
                     return@setOnClickListener
                 }
 
-                // Crear el objeto
+                // crea el objeto
                 val nuevaCita = InsertarCita(
                     id_animal = animalSeleccionadoId!!,
                     id_veterinario = idVeterinarioLogueado,
@@ -236,7 +234,7 @@ class AgregarCita : Fragment() {
                     hora = horaSeleccionadaApi
                 )
 
-                // Enviar
+                // lo envia
                 enviarCita(nuevaCita)
             }
         }

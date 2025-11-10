@@ -7,8 +7,8 @@ import android.util.Log
 import java.io.ByteArrayOutputStream
 
 /**
- * Objeto Camara Utils
- * Convertira la imagen de formato BitMap a Base 64 para enviarla por APi
+ * objeto Camara Utils
+ * convertira la imagen de formato BitMap a Base 64 para enviarla por APi
  */
 object CamaraUtils {
     fun convertirDeBitMapABase64(bitmap: Bitmap): String {
