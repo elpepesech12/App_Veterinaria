@@ -39,14 +39,14 @@ class AlertasVet : Fragment() {
         val listaMaestraDeAlertas = mutableListOf<AlertaUI>()
 
         fun setupRecyclerView() {
-            // Inicializa el adapter con una lista vacía
+            // inicializa el adapter con una lista vacía
             adapterAlertas = AlertasAdapter(emptyList())
             recyclerAlertas.layoutManager = LinearLayoutManager(requireContext())
             recyclerAlertas.adapter = adapterAlertas
         }
 
         fun cargarDatosDeAlertas() {
-            // Muestra la barra de progreso
+            // muestra la barra de progreso
             progressBar.visibility = View.VISIBLE
             recyclerAlertas.visibility = View.GONE
 
@@ -58,12 +58,12 @@ class AlertasVet : Fragment() {
                         val alertas = resultado.getOrNull()
                         if (!alertas.isNullOrEmpty()) {
 
-                            // Guardamos la lista completa en nuestra variable maestra
+                            // guardamos la lista completa en nuestra variable maestra
                             listaMaestraDeAlertas.clear()
                             listaMaestraDeAlertas.addAll(alertas)
 
                             toggleGroup.check(R.id.btn_filtro_todas)
-                            // Actualizamos el adapter con la lista completa
+                            // actualizamos el adapter con la lista completa
                             adapterAlertas?.updateData(listaMaestraDeAlertas)
 
                         } else {
@@ -110,16 +110,15 @@ class AlertasVet : Fragment() {
                         }
 
                         else -> {
-                            listaMaestraDeAlertas // Devolvemos la lista completa
+                            listaMaestraDeAlertas // devolvemos la lista completa
                         }
                     }
 
-                    // Actualizamos el adapter con la nueva lista filtrada
+                    // actualizamos el adapter con la nueva lista filtrada
                     adapterAlertas?.updateData(listaFiltrada)
                 }
             }
         }
-
 
         setupRecyclerView()
         cargarDatosDeAlertas()

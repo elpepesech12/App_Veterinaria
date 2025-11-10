@@ -71,32 +71,32 @@ class CitasVet : Fragment() {
 
         val fabAgregarCita: FloatingActionButton = view.findViewById(R.id.fab_agregar_cita)
 
-        // Función para actualizar la lista de abajo
+        // función para actualizar la lista de abajo
         fun filtrarCitasParaDia(fecha: LocalDate) {
-            // Actualiza el título
+            // actualiza el título
             txtTituloCitasDelDia.text = "Citas para ${fecha.format(formateadorTitulo)}"
 
-            // Filtra la lista maestra
+            // filtra la lista maestra
             val citasDelDia = listaMaestraDeCitas.filter { LocalDate.parse(it.fecha) == fecha }
 
-            // Actualiza el adapter (con check de nulo)
+            // actualiza el adapter (con check de nulo)
             adapterCitas?.actualizarDatos(citasDelDia)
 
-            // Muestra u oculta el mensaje de "No hay citas"
+            // muestra u oculta el mensaje de "no hay citas"
             txtNoCitas.isVisible = citasDelDia.isEmpty()
             recyclerCitas.isVisible = citasDelDia.isNotEmpty()
         }
 
-        // Función para manejar la selección de un día
+        // nunción para manejar la selección de un día
         fun seleccionarDia(fecha: LocalDate) {
             val fechaAntigua = diaSeleccionado
             diaSeleccionado = fecha
 
-            // Refrescamos el calendario
+            // refrescamos el calendario
             calendarioVista.notifyDateChanged(fecha)
             fechaAntigua?.let { calendarioVista.notifyDateChanged(it) }
 
-            // Filtramos la lista de abajo
+            // filtramos la lista de abajo
             filtrarCitasParaDia(fecha)
         }
 
@@ -184,7 +184,6 @@ class CitasVet : Fragment() {
                 }
             }
 
-            // Config 5: Botones de Flecha
             btnMesSiguiente.setOnClickListener {
                 calendarioVista.findFirstVisibleMonth()?.let {
                     calendarioVista.smoothScrollToMonth(it.yearMonth.plusMonths(1))
@@ -197,7 +196,7 @@ class CitasVet : Fragment() {
             }
         }
 
-        // Función para cargar los datos desde la API
+        // función para cargar los datos desde la api
         fun cargarDatosDeCitas(fechaInicio: String, fechaFin: String) {
             lifecycleScope.launch {
                 try {
@@ -226,7 +225,7 @@ class CitasVet : Fragment() {
             parentFragmentManager.beginTransaction()
 
                 .replace(R.id.fragment_container, AgregarCita())
-                .addToBackStack(null) // Permite volver atrás
+                .addToBackStack(null) // permite volver atrás
                 .commit()
         }
 

@@ -46,22 +46,22 @@ object VeterinariaRepository {
     // --- FUNCIÓN "HELPER" ---
 
     /**
-     * Función privada que lee el header 'Content-Range' (ej: "0-0/247")
+     * función privada que lee el header 'content-range' (ej: "0-0/247")
      * y extrae el número final (ej: 247).
      */
     private fun parseCountFromHeader(response: Response<Unit>): Long {
-        // Si la llamada falló (ej. 404), lanza un error
+        // si da 404, lanza un error
         if (!response.isSuccessful) {
             throw Exception("Error en la respuesta: ${response.code()}")
         }
 
-        // 1. Obtiene el header
+        // obtiene el header
         val rangeHeader = response.headers().get("Content-Range") // "0-0/247"
 
-        // 2. Lo divide por "/" y toma la última parte
+        // lo divide por "/" y toma la última parte
         val totalString = rangeHeader?.split("/")?.lastOrNull()
 
-        // 3. Lo convierte a número
+        // lo convierte a número
         return totalString?.toLongOrNull() ?: 0L
     }
 
@@ -72,19 +72,18 @@ object VeterinariaRepository {
             val emailQuery = "eq.$email"
             val passQuery = "eq.$pass"
 
-            // Llamamos a la nueva función del servicio
+            // llamamos a la nueva función del servicio
             val vetList = SupabaseClient.service.loginVeterinario(emailQuery, passQuery)
 
-            // Verificamos la respuesta
+            // verificamos la respuesta
             vetList.firstOrNull()?.let { veterinarioEncontrado ->
-                // ¡Éxito! Encontramos un veterinario. Lo devolvemos.
+                // se devuelve
                 Result.success(veterinarioEncontrado)
             } ?: run {
-                // La lista vino vacía. Credenciales incorrectas.
+                // la lista vino vacia. credenciales incorrectas.
                 Result.failure(Exception("Email o contraseña incorrectos"))
             }
         } catch (e: Exception) {
-            // Error de red, etc.
             Result.failure(e)
         }
     }
@@ -149,10 +148,9 @@ object VeterinariaRepository {
 
     suspend fun fetchAlertas(): Result<List<AlertaUI>> = withContext(Dispatchers.IO) {
         try {
-            // Llama a la nueva función del servicio
+            // llama a la nueva función del servicio
             Result.success(SupabaseClient.service.getAlertas())
         } catch (e: Exception) {
-            // Error de red, JSON que no calza, etc.
             Result.failure(e)
         }
     }

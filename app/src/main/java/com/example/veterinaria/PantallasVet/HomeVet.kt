@@ -98,7 +98,7 @@ class HomeVet : Fragment() {
             // para que el usuario no pueda "volver" atrás al home
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-            // Cierra la cctivity actual (InicioVet) donde vive este fragment
+            // cierra la cctivity actual (InicioVet) donde vive este fragment
             requireActivity().finish()
         }
     }

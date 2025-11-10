@@ -14,7 +14,7 @@ class AlertasAdapter(
     private var alertas: List<AlertaUI>
 ) : RecyclerView.Adapter<AlertasAdapter.AlertaViewHolder>() {
 
-    // ViewHolder: "Sostiene" las vistas de un solo item
+    // ViewHolder: "sostiene" las vistas de un solo item
     inner class AlertaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgIcono: ImageView = itemView.findViewById(R.id.img_alerta_icon)
         val txtTag: TextView = itemView.findViewById(R.id.txt_alerta_tag)
@@ -30,10 +30,10 @@ class AlertasAdapter(
         return AlertaViewHolder(view)
     }
 
-    // Devuelve la cantidad de items
+    // devuelve la cantidad de items
     override fun getItemCount(): Int = alertas.size
 
-    // Conecta los datos (AlertaUI) con las vistas (ViewHolder)
+    // conecta los datos (alertaUI) con las vistas (viewHolder)
     override fun onBindViewHolder(holder: AlertaViewHolder, position: Int) {
         val alerta = alertas[position]
         val context = holder.itemView.context
@@ -74,9 +74,9 @@ class AlertasAdapter(
         }
     }
 
-    // 5. Función para actualizar la lista desde el Fragment/ViewModel
+    // función para actualizar la lista desde el fragment/
     fun updateData(nuevasAlertas: List<AlertaUI>) {
         this.alertas = nuevasAlertas
-        notifyDataSetChanged() // Refresca la lista
+        notifyDataSetChanged() // refresca la lista
     }
 }
