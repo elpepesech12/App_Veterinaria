@@ -34,11 +34,11 @@
         app:layout_constraintTop_toBottomOf="@id/txt_titulo_app" />
 
     <ImageButton
-        android:id="@+id/btn_ajustes"
+        android:id="@+id/btn_cerrar_sesion"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_config"
-        android:contentDescription="Ajustes"
+        android:src="@drawable/ic_logout"
+        android:contentDescription="Cerrar Sesión"
         android:tint="#00695C"
         android:padding="10dp"
         android:background="@drawable/bg_btn_config"
@@ -159,6 +159,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/item_animal"
         tools:itemCount="3"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
