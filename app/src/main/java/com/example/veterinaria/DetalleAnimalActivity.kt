@@ -107,7 +107,7 @@ class DetalleAnimalActivity : AppCompatActivity() {
             tx_detalle_area.text = "Área ID: $animalAreaId"
         }
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_detalle_animal)) { v, insets ->
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_detalle_animal)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
