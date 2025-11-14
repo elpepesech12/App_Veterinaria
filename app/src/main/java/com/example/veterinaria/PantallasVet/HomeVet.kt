@@ -17,6 +17,7 @@ import com.example.veterinaria.R
 import com.example.veterinaria.api.SesionManager
 import com.example.veterinaria.api.VeterinariaRepository
 import com.example.veterinaria.funciones.ValidarConexionWAN
+import com.example.veterinaria.funciones.notificacion.Notificador
 import com.example.veterinaria.funciones.veterinario.AnimalesAdapter
 import kotlinx.coroutines.launch
 
@@ -93,6 +94,12 @@ class HomeVet : Fragment() {
         }
 
         btnCerrarSesion.setOnClickListener {
+            Notificador.enviarNotificacionSimple(
+                requireContext(), // El contexto del Fragment
+                "Sesión Cerrada",
+                "Has salido de tu cuenta de veterinario."
+            )
+
             SesionManager.clearLogin(requireContext())
             val intent = Intent(requireContext(), MainActivity::class.java)
             // para que el usuario no pueda "volver" atrás al home

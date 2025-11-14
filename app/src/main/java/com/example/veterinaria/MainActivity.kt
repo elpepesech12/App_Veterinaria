@@ -1,6 +1,8 @@
 package com.example.veterinaria
 
+import android.Manifest
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -8,7 +10,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -16,12 +20,38 @@ import com.example.veterinaria.api.SesionManager
 import com.example.veterinaria.api.VeterinariaRepository
 import com.example.veterinaria.funciones.ValidarConexionWAN
 import kotlinx.coroutines.launch
+import android.content.pm.PackageManager
 
 class MainActivity : AppCompatActivity() {
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                Log.d("PERMISOS", "Notificaciones permitidas")
+            } else {
+                Log.w("PERMISOS", "Notificaciones denegadas")
+                Toast.makeText(this, "Sin permiso, no recibirás alertas críticas", Toast.LENGTH_LONG).show()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        fun pedirPermisoNotificaciones() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (ContextCompat.checkSelfPermission(
+                        this@MainActivity, // 'this' ahora es 'this@MainActivity'
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+        }
+
+        pedirPermisoNotificaciones()
 
         if (ValidarConexionWAN.isOnline(this)) {
             Log.d("LOGIN", "Dispositivo conectado a internet.")
