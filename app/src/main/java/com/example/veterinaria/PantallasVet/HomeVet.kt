@@ -89,14 +89,14 @@ class HomeVet : Fragment() {
         txtVerTodos.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, VerAnimales())
-                .addToBackStack(null) // Permite volver atrás con el botón del teléfono
+                .addToBackStack(null) // permite volver atras con el botón del celu
                 .commit()
         }
 
         btnCerrarSesion.setOnClickListener {
             Notificador.enviarNotificacionSimple(
-                requireContext(), // El contexto del Fragment
-                "Sesión Cerrada",
+                requireContext(), // el contexto del fragment
+                "Sesión cerrada",
                 "Has salido de tu cuenta de veterinario."
             )
 
