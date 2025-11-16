@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    android:layout_marginBottom="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/img_icono_registro"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_documento"
+            app:tint="#00695C"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_animal_registro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/img_icono_registro"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_estado_registro"
+            tools:text="Animal" />
+
+        <TextView
+            android:id="@+id/tv_doctor_registro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/tv_animal_registro"
+            app:layout_constraintTop_toBottomOf="@id/tv_animal_registro"
+            app:layout_constraintEnd_toEndOf="@id/tv_animal_registro"
+            tools:text="Dr/a a cargo" />
+
+        <TextView
+            android:id="@+id/tv_estado_registro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_tag_exito"
+            android:textColor="#1B5E20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_animal_registro"
+            tools:text="Completado" />
+
+        <TextView
+            android:id="@+id/tv_tipo_cita_registro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:background="@drawable/bg_tag_info"
+            android:textColor="#0D47A1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_doctor_registro"
+            tools:text="Chequeo rutinario" />
+
+        <TextView
+            android:id="@+id/tv_fecha_registro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:drawableStart="@drawable/ic_citas"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            app:drawableTint="#555555"
+            app:layout_constraintStart_toEndOf="@id/tv_tipo_cita_registro"
+            app:layout_constraintTop_toTopOf="@id/tv_tipo_cita_registro"
+            app:layout_constraintBottom_toBottomOf="@id/tv_tipo_cita_registro"
+            tools:text="2025-11-01" />
+
+        <TextView
+            android:id="@+id/tv_descripcion_registro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_tipo_cita_registro"
+            tools:text="Todos los signos vitales dentro del rango normal. Se recomienda continuar con la dieta actual." />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_ver_detalles"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Ver detalles"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_descripcion_registro" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_descargar"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descargar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_ver_detalles"
+            app:layout_constraintBottom_toBottomOf="@id/btn_ver_detalles" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
