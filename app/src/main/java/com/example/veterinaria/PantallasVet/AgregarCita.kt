@@ -23,6 +23,7 @@ import com.example.veterinaria.api.InsertarCita
 import com.example.veterinaria.api.SesionManager
 import com.example.veterinaria.api.TipoCitaSimple
 import com.example.veterinaria.api.VeterinariaRepository
+import com.example.veterinaria.funciones.notificacion.Notificador
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -194,6 +195,14 @@ class AgregarCita : Fragment() {
                     val resultado = VeterinariaRepository.insertCita(cita)
                     resultado.onSuccess { citaCreada ->
                         Toast.makeText(context, "¡Cita creada con éxito!", Toast.LENGTH_LONG).show()
+
+                        Notificador.enviarNotificacionCita(
+                            requireContext(),
+                            spinnerAnimal.text.toString(),
+                            spinnerTipoCita.text.toString(),
+                            inputHora.text.toString()
+                        )
+
                         // volvemos a la pantalla anterior (el calendario)
                         findNavController().popBackStack()
                     }.onFailure {

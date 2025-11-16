@@ -29,7 +29,7 @@ class CitasAdapter(
     override fun onBindViewHolder(holder: CitaViewHolder, position: Int) {
         val cita = citas[position]
 
-        holder.txtHora.text = cita.hora.substring(0, 5) // Muestra "10:00"
+        holder.txtHora.text = cita.hora.substring(0, 5)
         holder.txtTitulo.text = cita.tipoCita.nombre
         holder.txtAnimal.text = "con ${cita.animal.nombre}"
 
