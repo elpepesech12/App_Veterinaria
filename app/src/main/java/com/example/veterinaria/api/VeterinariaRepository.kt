@@ -242,4 +242,33 @@ object VeterinariaRepository {
                 ?: Result.failure(Exception("No se encontró Área con ID $id"))
         } catch (e: Exception) { Result.failure(e) }
     }
+
+    suspend fun deleteAnimal(id: Long): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val query = "eq.$id"
+            val response = SupabaseClient.service.deleteAnimal(query)
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Error al eliminar: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // [NUEVO] Lógica para editar
+    suspend fun updateAnimal(id: Long, datos: AnimalInsertRequest): Result<Animal> = withContext(Dispatchers.IO) {
+        try {
+            val query = "eq.$id"
+            val lista = SupabaseClient.service.updateAnimal(query, datos)
+            if (lista.isNotEmpty()) {
+                Result.success(lista[0])
+            } else {
+                Result.failure(Exception("No se pudo actualizar"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

@@ -2,8 +2,10 @@ package com.example.veterinaria.api
 
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -174,6 +176,19 @@ interface SupabaseService {
         @Query("id_area") idQuery: String,
         @Query("select") select: String = "id_area,nombre"
     ): List<Area>
+
+    @DELETE("animal")
+    suspend fun deleteAnimal(
+        @Query("id_animal") idQuery: String // Se envía como "eq.ID"
+    ): retrofit2.Response<Unit>
+
+    // EDITAR
+    @PATCH("animal")
+    suspend fun updateAnimal(
+        @Query("id_animal") idQuery: String,
+        @Body request: AnimalInsertRequest,
+        @Header("Prefer") prefer: String = "return=representation" // <--- ¡ESTA LÍNEA FALTABA!
+    ): List<Animal>
 }
 
 

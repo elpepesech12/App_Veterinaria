@@ -6,8 +6,17 @@
     android:id="@+id/main_insertar_animal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F9F9"
+    android:background="#F5F5F5"
     tools:context=".InsertarAnimalActivity">
+
+    <View
+        android:id="@+id/header_bg"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="#2E7D32"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageButton
         android:id="@+id/btn_volver_menu_insertar"
@@ -16,6 +25,7 @@
         android:src="@drawable/ic_arrow_back"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Volver"
+        app:tint="@color/white"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,23 +35,32 @@
         android:id="@+id/tx_insertar_titulo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Agregar Nuevo Animal"
-        android:textColor="@color/black"
-        android:textSize="20sp"
+        android:text="Nuevo Ingreso"
+        android:textColor="@color/white"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         app:layout_constraintStart_toEndOf="@id/btn_volver_menu_insertar"
         app:layout_constraintTop_toTopOf="@id/btn_volver_menu_insertar"
         app:layout_constraintBottom_toBottomOf="@id/btn_volver_menu_insertar"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Complete el formulario"
+        android:textColor="#CCFFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/tx_insertar_titulo"
+        app:layout_constraintTop_toBottomOf="@id/tx_insertar_titulo"/>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_volver_menu_insertar"
-        app:layout_constraintBottom_toBottomOf="parent">
-
+        android:clipToPadding="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="80dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,27 +70,31 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/white"
+                android:layout_marginBottom="16dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Información Básica"
                         android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textColor="#2E7D32"
                         android:layout_marginBottom="16dp"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nombre">
+                        android:hint="Nombre del Animal"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/ed_animal_nombre"
                             android:layout_width="match_parent"
@@ -82,8 +105,9 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:hint="Fecha Nacimiento (AAAA-MM-DD)">
+                        android:layout_marginTop="12dp"
+                        android:hint="Fecha Nacimiento (AAAA-MM-DD)"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/ed_animal_fecha_nac"
                             android:layout_width="match_parent"
@@ -96,121 +120,209 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/white"
+                android:layout_marginBottom="16dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Clasificación"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"
-                        android:layout_marginBottom="16dp"/>
+                        android:layout_marginBottom="16dp"
+                        android:text="Clasificación y Ubicación"
+                        android:textColor="#2E7D32"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sexo:" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sexo"
+                        android:textColor="#757575"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
                     <Spinner
                         android:id="@+id/sp_animal_sexo"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_marginBottom="8dp" />
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Especie:" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="#E0E0E0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Especie"
+                        android:textColor="#757575"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
                     <Spinner
                         android:id="@+id/sp_animal_especie"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_marginBottom="8dp" />
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hábitat:" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="#E0E0E0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hábitat"
+                        android:textColor="#757575"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
                     <Spinner
                         android:id="@+id/sp_animal_habitat"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_marginBottom="8dp" />
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Estado de Salud:" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="#E0E0E0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Estado de Salud"
+                        android:textColor="#757575"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
                     <Spinner
                         android:id="@+id/sp_animal_estado"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_marginBottom="8dp" />
 
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Área:" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="#E0E0E0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Área Designada"
+                        android:textColor="#757575"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
                     <Spinner
                         android:id="@+id/sp_animal_area"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"/>
+                        android:layout_height="48dp" />
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/white"
+                android:layout_marginBottom="24dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fotografía"
+                        android:text="Registro Fotográfico"
                         android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textColor="#2E7D32"
                         android:layout_marginBottom="16dp"/>
 
-                    <androidx.camera.view.PreviewView
-                        android:id="@+id/preview_view_animal"
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:background="#EEE" />
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="#E0E0E0"
+                        app:strokeWidth="1dp">
 
-                    <Button
+                        <androidx.camera.view.PreviewView
+                            android:id="@+id/preview_view_animal"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:background="#EEEEEE" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_tomar_foto_animal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tomar Foto"
-                        android:layout_marginTop="8dp"/>
+                        android:text="Capturar Foto"
+                        app:icon="@drawable/ic_camera"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_marginTop="12dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Vista Previa:"
+                        android:textAlignment="center"
+                        android:textSize="12sp"
+                        android:textColor="#757575"
+                        android:layout_marginTop="12dp"/>
 
-                    <ImageView
+                    <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/img_foto_capturada"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="4dp"
                         android:scaleType="centerCrop"
-                        android:background="#DDD"
+                        android:background="#F0F0F0"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
                         android:contentDescription="Foto capturada" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_insertar_animal_api"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Guardar (API)"
-                android:layout_marginTop="32dp"/>
+                android:layout_height="60dp"
+                android:text="GUARDAR EN API"
+                android:textSize="16sp"
+                android:backgroundTint="#2E7D32"
+                android:layout_marginTop="8dp"/>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_insertar_animal_local"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Guardar (Local)"
+                android:layout_height="50dp"
+                android:text="Guardar Local"
+                android:textColor="#757575"
+                app:strokeColor="#9E9E9E"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="32dp"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

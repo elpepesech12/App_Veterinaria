@@ -6,62 +6,137 @@
     android:id="@+id/main_admin_menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F9F9"
+    android:background="#F5F5F5"
     tools:context=".AdminMenuActivity">
+
+    <View
+        android:id="@+id/view_header"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:background="#2E7D32"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="#1AFFFFFF"
+        android:backgroundTint="#30FFFFFF"
+        android:rotation="45"
+        android:translationX="100dp"
+        android:translationY="-50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/img_admin_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_person"
+        app:tint="#FFFFFF"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <TextView
+        android:id="@+id/tx_titulo_static"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Panel de Control"
+        android:textColor="#CCFFFFFF"
+        android:textSize="14sp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toEndOf="@id/img_admin_icon"
+        app:layout_constraintTop_toTopOf="@id/img_admin_icon" />
 
     <TextView
         android:id="@+id/tx_bienvenida_admin"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Menú Administrador"
-        android:textColor="@color/black"
-        android:textSize="24sp"
+        android:text="Bienvenido Admin"
+        android:textColor="@color/white"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginEnd="24dp"
+        app:layout_constraintStart_toStartOf="@id/tx_titulo_static"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tx_titulo_static" />
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="32dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="32dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/img_admin_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_menu_ver_animales"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Ver Animales"
-            app:icon="@drawable/ic_pets"
-            app:iconGravity="textStart"
-            android:layout_marginBottom="16dp"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_menu_agregar_animal"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Agregar Animal Nuevo"
-            app:icon="@drawable/ic_add"
-            app:iconGravity="textStart"
-            android:layout_marginBottom="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Acciones Rápidas"
+                android:textStyle="bold"
+                android:textColor="#424242"
+                android:textSize="18sp"
+                android:layout_marginBottom="16dp"/>
 
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_menu_ver_animales"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="Ver Lista de Animales"
+                android:textSize="16sp"
+                android:backgroundTint="#E8F5E9"
+                android:textColor="#1B5E20"
+                app:icon="@drawable/ic_pets"
+                app:iconTint="#2E7D32"
+                app:iconSize="28dp"
+                app:iconGravity="textStart"
+                android:textAlignment="textStart"
+                android:layout_marginBottom="16dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_menu_agregar_animal"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="Registrar Nuevo Animal"
+                android:textSize="16sp"
+                android:backgroundTint="#E3F2FD"
+                android:textColor="#0D47A1"
+                app:icon="@drawable/ic_add"
+                app:iconTint="#1565C0"
+                app:iconSize="28dp"
+                app:iconGravity="textStart"
+                android:textAlignment="textStart"
+                android:layout_marginBottom="8dp"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_menu_cerrar_sesion"
-        style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Cerrar Sesión"
         android:textColor="#C62828"
-        app:strokeColor="#C62828"
         app:icon="@drawable/ic_logout"
-        app:iconGravity="textStart"
         app:iconTint="#C62828"
-        android:layout_margin="32dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

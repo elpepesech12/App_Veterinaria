@@ -12,10 +12,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.veterinaria.funciones.CargarAnimalesApi
 import com.example.veterinaria.funciones.LeerAnimalesLocal
 import com.example.veterinaria.funciones.ValidarConexionWAN
-import androidx.lifecycle.lifecycleScope
 import com.example.veterinaria.api.Animal
 import com.example.veterinaria.bd.AnimalLocal
-import kotlinx.coroutines.launch
 
 class ListarAnimalesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,25 +28,20 @@ class ListarAnimalesActivity : AppCompatActivity() {
         }
 
         if (ValidarConexionWAN.isOnline(this)) {
-            val toast = Toast.makeText(this, "CON CONEXIÓN", Toast.LENGTH_SHORT)
-            toast.show()
+            Toast.makeText(this, "CON CONEXIÓN", Toast.LENGTH_SHORT).show()
         } else {
-            val toast = Toast.makeText(this, "SIN CONEXIÓN. Cargando datos locales.", Toast.LENGTH_LONG)
-            toast.show()
+            Toast.makeText(this, "SIN CONEXIÓN. Datos locales.", Toast.LENGTH_LONG).show()
         }
 
         val lvAnimales: ListView = findViewById(R.id.lv_animales_admin)
         val btnVolver: Button = findViewById(R.id.btn_volver_al_menu)
 
-
         btnVolver.setOnClickListener {
             finish()
         }
 
-        lvAnimales.setOnItemClickListener { parent, view, position, id ->
-
+        lvAnimales.setOnItemClickListener { parent, _, position, _ ->
             val item = parent.getItemAtPosition(position)
-
             val intent = Intent(this, DetalleAnimalActivity::class.java)
 
             if (item is Animal) {
@@ -61,7 +54,7 @@ class ListarAnimalesActivity : AppCompatActivity() {
                 intent.putExtra("ANIMAL_ESTADO", item.idEstadoSalud)
                 intent.putExtra("ANIMAL_AREA", item.idArea)
                 intent.putExtra("ES_LOCAL", false)
-                intent.putExtra("ANIMAL_FOTO", item.fotoUrl)
+                intent.putExtra("ANIMAL_FOTO", item.fotoUrl) // Pasamos la foto (link o base64)
 
                 startActivity(intent)
 
@@ -78,12 +71,10 @@ class ListarAnimalesActivity : AppCompatActivity() {
                 intent.putExtra("ANIMAL_FOTO", item.fotoUrl)
 
                 startActivity(intent)
-
             } else {
                 Toast.makeText(this, "Error: Objeto no reconocido", Toast.LENGTH_SHORT).show()
             }
         }
-
 
         cargarDatos(lvAnimales)
     }
@@ -96,13 +87,10 @@ class ListarAnimalesActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onResume() {
         super.onResume()
-
-
+        // Recargamos la lista al volver (por si borramos o editamos un animal)
         val lvAnimales: ListView = findViewById(R.id.lv_animales_admin)
-
         cargarDatos(lvAnimales)
     }
 }
