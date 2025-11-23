@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import coil.load  // IMPORTANTE
+import coil.load
 import com.example.veterinaria.api.VeterinariaRepository
 import com.example.veterinaria.camara.CamaraUtils
 import com.example.veterinaria.funciones.ValidarConexionWAN
@@ -26,7 +26,6 @@ class DetalleAnimalActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_detalle_animal)
 
-        // Referencias UI
         val btnVolver: ImageButton = findViewById(R.id.btn_detalle_volver)
         val imgFoto: ImageView = findViewById(R.id.img_detalle_foto)
         val txNombre: TextView = findViewById(R.id.tx_detalle_nombre)
@@ -44,65 +43,64 @@ class DetalleAnimalActivity : AppCompatActivity() {
 
         btnVolver.setOnClickListener { finish() }
 
-        // Recibir datos
         val animalId = intent.getLongExtra("ANIMAL_ID", 0L)
-        val animalNombre = intent.getStringExtra("ANIMAL_NOMBRE") ?: ""
-        val animalFecha = intent.getStringExtra("ANIMAL_FECHA") ?: ""
-        val animalSexo = intent.getStringExtra("ANIMAL_SEXO") ?: ""
+        val animalNombre = intent.getStringExtra("ANIMAL_NOMBRE") ?: "Sin Nombre"
+        val animalFecha = intent.getStringExtra("ANIMAL_FECHA") ?: "Sin Fecha"
+        val animalSexo = intent.getStringExtra("ANIMAL_SEXO") ?: "?"
+        val animalFotoUrl = intent.getStringExtra("ANIMAL_FOTO") // La URL o Base64
+
         val animalEspecieId = intent.getLongExtra("ANIMAL_ESPECIE", 0L)
         val animalHabitatId = intent.getLongExtra("ANIMAL_HABITAT", 0L)
         val animalEstadoId = intent.getLongExtra("ANIMAL_ESTADO", 0L)
         val animalAreaId = intent.getLongExtra("ANIMAL_AREA", 0L)
-        val animalFotoUrl = intent.getStringExtra("ANIMAL_FOTO")
         val esLocal = intent.getBooleanExtra("ES_LOCAL", false)
 
-        // Mostrar datos básicos
         val origen = if (esLocal) "Local" else "API"
         txNombre.text = animalNombre
-        txId.text = "ID ($origen): $animalId"
-        txFecha.text = "Nacimiento: $animalFecha"
+        txId.text = "ID: $animalId"
+        txFecha.text = "Nac: $animalFecha"
         txSexo.text = "Sexo: $animalSexo"
 
-        // --- SOLUCIÓN FOTO ---
+
         if (!animalFotoUrl.isNullOrEmpty()) {
-            // 1. Limpiamos el string de espacios invisibles
             val fotoLimpia = animalFotoUrl.trim()
 
             if (fotoLimpia.startsWith("http")) {
-                // CASO A: Es un LINK (Supabase)
                 imgFoto.load(fotoLimpia) {
                     crossfade(true)
                     placeholder(R.drawable.ic_launcher_background)
-                    error(R.drawable.ic_launcher_background)
+                    error(R.drawable.ic_launcher_foreground)
                 }
             } else {
-                // CASO B: Es Base64 (Foto nueva)
-                val bitmap = CamaraUtils.convertirDeBase64ABitmap(fotoLimpia)
-                if (bitmap != null) {
-                    imgFoto.setImageBitmap(bitmap)
-                } else {
+                try {
+                    val bitmap = CamaraUtils.convertirDeBase64ABitmap(fotoLimpia)
+                    if (bitmap != null) {
+                        imgFoto.setImageBitmap(bitmap)
+                    } else {
+                        imgFoto.setImageResource(R.drawable.ic_launcher_background)
+                    }
+                } catch (e: Exception) {
                     imgFoto.setImageResource(R.drawable.ic_launcher_background)
                 }
             }
+        } else {
+            imgFoto.setImageResource(R.drawable.ic_launcher_background)
         }
 
-        // Cargar datos de API
-        if (ValidarConexionWAN.isOnline(this)) {
-            txEstado.text = "Cargando..."
+        if (ValidarConexionWAN.isOnline(this) && !esLocal) {
+            txEstado.text = "Cargando info..."
             lifecycleScope.launch {
-                VeterinariaRepository.fetchEspecieById(animalEspecieId).onSuccess { txEspecie.text = "Especie: ${it.nombre_comun}" }
-                VeterinariaRepository.fetchHabitatById(animalHabitatId).onSuccess { txHabitat.text = "Hábitat: ${it.nombre}" }
-                VeterinariaRepository.fetchEstadoById(animalEstadoId).onSuccess { txEstado.text = "Estado: ${it.estado}" }
-                VeterinariaRepository.fetchAreaById(animalAreaId).onSuccess { txArea.text = "Área: ${it.nombre}" }
+                runCatching {
+                    if(animalEspecieId != 0L) VeterinariaRepository.fetchEspecieById(animalEspecieId).onSuccess { txEspecie.text = "Especie: ${it.nombre_comun}" }
+                    if(animalHabitatId != 0L) VeterinariaRepository.fetchHabitatById(animalHabitatId).onSuccess { txHabitat.text = "Hábitat: ${it.nombre}" }
+                    if(animalEstadoId != 0L) VeterinariaRepository.fetchEstadoById(animalEstadoId).onSuccess { txEstado.text = "Estado: ${it.estado}" }
+                    if(animalAreaId != 0L) VeterinariaRepository.fetchAreaById(animalAreaId).onSuccess { txArea.text = "Área: ${it.nombre}" }
+                }
             }
         } else {
             txEstado.text = "Estado ID: $animalEstadoId"
-            txEspecie.text = "Especie ID: $animalEspecieId"
-            txHabitat.text = "Hábitat ID: $animalHabitatId"
-            txArea.text = "Área ID: $animalAreaId"
         }
 
-        // Botones CRUD
         if (esLocal) {
             btnEditar.visibility = View.GONE
             btnEliminar.visibility = View.GONE
@@ -123,16 +121,17 @@ class DetalleAnimalActivity : AppCompatActivity() {
             }
 
             btnEditar.setOnClickListener {
-                val intentEditar = Intent(this, EditarAnimalActivity::class.java)
-                intentEditar.putExtra("ID_ANIMAL", animalId)
-                intentEditar.putExtra("NOMBRE", animalNombre)
-                intentEditar.putExtra("FECHA", animalFecha)
-                intentEditar.putExtra("FOTO", animalFotoUrl)
-                intentEditar.putExtra("SEXO_ID", animalSexo)
-                intentEditar.putExtra("ESPECIE_ID", animalEspecieId)
-                intentEditar.putExtra("HABITAT_ID", animalHabitatId)
-                intentEditar.putExtra("ESTADO_ID", animalEstadoId)
-                intentEditar.putExtra("AREA_ID", animalAreaId)
+                val intentEditar = Intent(this, EditarAnimalActivity::class.java).apply {
+                    putExtra("ID_ANIMAL", animalId)
+                    putExtra("NOMBRE", animalNombre)
+                    putExtra("FECHA", animalFecha)
+                    putExtra("FOTO", animalFotoUrl)
+                    putExtra("SEXO_ID", animalSexo)
+                    putExtra("ESPECIE_ID", animalEspecieId)
+                    putExtra("HABITAT_ID", animalHabitatId)
+                    putExtra("ESTADO_ID", animalEstadoId)
+                    putExtra("AREA_ID", animalAreaId)
+                }
                 startActivity(intentEditar)
                 finish()
             }

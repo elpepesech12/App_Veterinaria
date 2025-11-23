@@ -1,5 +1,6 @@
 package com.example.veterinaria.funciones.veterinario
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,15 +8,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import coil.load // ¡IMPORTANTE!
+import coil.load
+import com.example.veterinaria.DetalleAnimalActivity
 import com.example.veterinaria.R
 import com.example.veterinaria.api.AnimalListado
+import com.example.veterinaria.camara.CamaraUtils
 
 class AnimalesAdapter(
     private var animales: List<AnimalListado>
 ) : RecyclerView.Adapter<AnimalesAdapter.AnimalViewHolder>() {
 
-    // ViewHolder "sostiene" las vistas de un solo item
     inner class AnimalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgAnimal: ImageView = itemView.findViewById(R.id.img_animal)
         val txtNombre: TextView = itemView.findViewById(R.id.txt_animal_nombre)
@@ -25,59 +27,79 @@ class AnimalesAdapter(
         val txtArea: TextView = itemView.findViewById(R.id.txt_animal_area)
     }
 
-    // se llama cuando se necesita crear un nuevo ViewHolder (fila)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimalViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_animal, parent, false) // Usa el nuevo item_animal.xml
+            .inflate(R.layout.item_animal, parent, false)
         return AnimalViewHolder(view)
     }
 
-    // devuelve la cantidad de items
     override fun getItemCount(): Int = animales.size
 
-    // conecta los datos (AnimalListado) con las vistas (ViewHolder)
     override fun onBindViewHolder(holder: AnimalViewHolder, position: Int) {
         val animal = animales[position]
         val context = holder.itemView.context
 
-        // seteamos textos
         holder.txtNombre.text = animal.nombre
         holder.txtEspecie.text = animal.especie
         holder.txtEdad.text = "${animal.edad ?: '?'} años"
         holder.txtArea.text = animal.area
 
-        // cargar imagen con coil
-        // (se usa la url de supabase storage que guardaste en la columna foto_url)
-        holder.imgAnimal.load(animal.fotoUrl) {
-            placeholder(R.drawable.ic_pulso)
-            error(R.drawable.ic_error)
+        holder.imgAnimal.load(null)
+
+        val fotoUrl = animal.fotoUrl
+
+        if (!fotoUrl.isNullOrEmpty()) {
+            val fotoLimpia = fotoUrl.trim()
+
+            if (fotoLimpia.startsWith("http")) {
+                holder.imgAnimal.load(fotoLimpia) {
+                    crossfade(true)
+                    placeholder(R.drawable.ic_pulso)
+                    error(android.R.drawable.ic_menu_report_image)
+                }
+            } else {
+                val imageBytes = CamaraUtils.base64ToByteArray(fotoLimpia)
+
+                if (imageBytes != null) {
+                    holder.imgAnimal.load(imageBytes) {
+                        crossfade(true)
+                        placeholder(R.drawable.ic_pulso)
+                        error(android.R.drawable.ic_menu_report_image)
+                    }
+                } else {
+                    holder.imgAnimal.setImageResource(android.R.drawable.ic_menu_camera)
+                }
+            }
+        } else {
+
+            holder.imgAnimal.setImageResource(android.R.drawable.ic_menu_camera)
         }
 
-        // lógica para el tag de estado
         holder.txtEstado.text = animal.estado
-        when (animal.estado.lowercase()) { // "Saludable", "Crítico", etc.
-            "saludable" -> {
-                holder.txtEstado.background = ContextCompat.getDrawable(context, R.drawable.bg_tag_saludable)
-                holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.black))
+        val colorBackground = when (animal.estado.lowercase()) {
+            "saludable" -> R.drawable.bg_tag_saludable
+            "crítico" -> R.drawable.bg_tag_critico
+            "en observación", "en tratamiento", "en cuarentena" -> R.drawable.bg_tag_monitoreo
+            else -> R.drawable.bg_tag_monitoreo
+        }
+        holder.txtEstado.background = ContextCompat.getDrawable(context, colorBackground)
+        holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.black))
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, DetalleAnimalActivity::class.java).apply {
+                putExtra("ANIMAL_ID", animal.id)
+                putExtra("ANIMAL_NOMBRE", animal.nombre)
+                putExtra("ANIMAL_FOTO", animal.fotoUrl)
+                putExtra("ANIMAL_FECHA", "${animal.edad ?: 0} años")
+                putExtra("ANIMAL_SEXO", "?")
+                putExtra("ES_LOCAL", false)
             }
-            "crítico" -> {
-                holder.txtEstado.background = ContextCompat.getDrawable(context, R.drawable.bg_tag_critico)
-                holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.black))
-            }
-            "en observación", "en tratamiento", "en cuarentena" -> {
-                holder.txtEstado.background = ContextCompat.getDrawable(context, R.drawable.bg_tag_monitoreo)
-                holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.black))
-            }
-            else -> {
-                holder.txtEstado.background = ContextCompat.getDrawable(context, R.drawable.bg_tag_monitoreo)
-                holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.black))
-            }
+            context.startActivity(intent)
         }
     }
 
-    // función para actualizar la lista desde el fragment
     fun updateData(nuevosAnimales: List<AnimalListado>) {
         this.animales = nuevosAnimales
-        notifyDataSetChanged() // refresca la lista
+        notifyDataSetChanged()
     }
 }

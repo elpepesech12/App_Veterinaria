@@ -19,31 +19,29 @@ object InsertarAnimalAPI {
         idEstado: Long,
         idArea: Long,
         fotoBase64: String?,
-        onSuccess: ((String) -> Unit)? = null,
-        onError: ((Throwable) -> Unit)? = null
+        onSuccess: () -> Unit,
+        onError: () -> Unit
     ) {
-        // Creamos el objeto request con los datos recibidos
-        val request = AnimalInsertRequest(
-            nombre = nombre.trim(),
-            fecha_nacimiento = fechaNac.trim(),
-            id_sexo = idSexo,
-            id_especie = idEspecie,
-            id_habitat = idHabitat,
-            id_estado_salud = idEstado,
-            id_area = idArea,
-            foto_url = fotoBase64
-        )
-
         owner.lifecycleScope.launch {
-            val res = VeterinariaRepository.insertAnimal(request)
-            res.onSuccess { animalesInsertados ->
-                val nombreAnimal = animalesInsertados.firstOrNull()?.nombre ?: "Animal"
-                val msg = "Se insertó $nombreAnimal correctamente"
-                Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
-                onSuccess?.invoke(msg)
+            val nuevoAnimal = AnimalInsertRequest(
+                nombre = nombre,
+                fecha_nacimiento = fechaNac,
+                id_sexo = idSexo,
+                id_especie = idEspecie,
+                id_habitat = idHabitat,
+                id_estado_salud = idEstado,
+                id_area = idArea,
+                foto_url = fotoBase64
+            )
+
+            val resultado = VeterinariaRepository.insertAnimal(nuevoAnimal)
+
+            resultado.onSuccess {
+                Toast.makeText(context, "¡Animal creado con foto!", Toast.LENGTH_SHORT).show()
+                onSuccess()
             }.onFailure { e ->
-                Toast.makeText(context, "Error insertando: ${e.message}", Toast.LENGTH_LONG).show()
-                onError?.invoke(e)
+                Toast.makeText(context, "Error API: ${e.message}", Toast.LENGTH_LONG).show()
+                onError()
             }
         }
     }
