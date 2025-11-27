@@ -1,6 +1,7 @@
 package com.example.veterinaria
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -26,98 +27,142 @@ class DetalleAnimalActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_detalle_animal)
 
+        // --- REFERENCIAS UI ---
         val btnVolver: ImageButton = findViewById(R.id.btn_detalle_volver)
         val imgFoto: ImageView = findViewById(R.id.img_detalle_foto)
         val txNombre: TextView = findViewById(R.id.tx_detalle_nombre)
         val txId: TextView = findViewById(R.id.tx_detalle_id)
+        val txStatus: TextView = findViewById(R.id.tx_detalle_activo_status)
+
         val txFecha: TextView = findViewById(R.id.tx_detalle_fecha_nac)
         val txSexo: TextView = findViewById(R.id.tx_detalle_sexo)
-
-        val txEstado: TextView = findViewById(R.id.tx_detalle_estado)
         val txEspecie: TextView = findViewById(R.id.tx_detalle_especie)
-        val txHabitat: TextView = findViewById(R.id.tx_detalle_habitat)
+
         val txArea: TextView = findViewById(R.id.tx_detalle_area)
+        val txHabitat: TextView = findViewById(R.id.tx_detalle_habitat)
+        val txEstado: TextView = findViewById(R.id.tx_detalle_estado)
 
         val btnEditar: Button = findViewById(R.id.btn_detalle_editar)
         val btnEliminar: Button = findViewById(R.id.btn_detalle_eliminar)
 
         btnVolver.setOnClickListener { finish() }
 
+        // --- RECIBIR DATOS ---
         val animalId = intent.getLongExtra("ANIMAL_ID", 0L)
-        val animalNombre = intent.getStringExtra("ANIMAL_NOMBRE") ?: "Sin Nombre"
-        val animalFecha = intent.getStringExtra("ANIMAL_FECHA") ?: "Sin Fecha"
-        val animalSexo = intent.getStringExtra("ANIMAL_SEXO") ?: "?"
-        val animalFotoUrl = intent.getStringExtra("ANIMAL_FOTO") // La URL o Base64
+        val animalNombre = intent.getStringExtra("ANIMAL_NOMBRE") ?: ""
+        val animalFecha = intent.getStringExtra("ANIMAL_FECHA") ?: ""
+        val animalSexo = intent.getStringExtra("ANIMAL_SEXO") ?: ""
+        val animalFotoUrl = intent.getStringExtra("ANIMAL_FOTO")
+
+        val esLocal = intent.getBooleanExtra("ES_LOCAL", false)
+        val esActivo = intent.getBooleanExtra("ANIMAL_ACTIVO", true)
 
         val animalEspecieId = intent.getLongExtra("ANIMAL_ESPECIE", 0L)
         val animalHabitatId = intent.getLongExtra("ANIMAL_HABITAT", 0L)
         val animalEstadoId = intent.getLongExtra("ANIMAL_ESTADO", 0L)
         val animalAreaId = intent.getLongExtra("ANIMAL_AREA", 0L)
-        val esLocal = intent.getBooleanExtra("ES_LOCAL", false)
 
+        // --- SETEAR TEXTOS ---
         val origen = if (esLocal) "Local" else "API"
         txNombre.text = animalNombre
-        txId.text = "ID: $animalId"
-        txFecha.text = "Nac: $animalFecha"
-        txSexo.text = "Sexo: $animalSexo"
+        txId.text = "ID ($origen): $animalId"
+        txFecha.text = animalFecha
+        txSexo.text = animalSexo
 
+        // --- ESTADO ACTIVO/INACTIVO ---
+        if (esActivo) {
+            txStatus.text = "ACTIVO"
+            txStatus.setTextColor(Color.parseColor("#006400")) // Verde
+            txStatus.setBackgroundResource(R.drawable.bg_tag_saludable)
+        } else {
+            txStatus.text = "INACTIVO"
+            txStatus.setTextColor(Color.parseColor("#B00020")) // Rojo
+            txStatus.setBackgroundResource(R.drawable.bg_tag_critico)
+        }
 
+        // --- FOTO ---
+        imgFoto.load(null)
         if (!animalFotoUrl.isNullOrEmpty()) {
             val fotoLimpia = animalFotoUrl.trim()
-
             if (fotoLimpia.startsWith("http")) {
                 imgFoto.load(fotoLimpia) {
                     crossfade(true)
-                    placeholder(R.drawable.ic_launcher_background)
-                    error(R.drawable.ic_launcher_foreground)
+                    placeholder(R.drawable.ic_pulso)
+                    error(android.R.drawable.ic_menu_report_image)
                 }
             } else {
-                try {
-                    val bitmap = CamaraUtils.convertirDeBase64ABitmap(fotoLimpia)
-                    if (bitmap != null) {
-                        imgFoto.setImageBitmap(bitmap)
-                    } else {
-                        imgFoto.setImageResource(R.drawable.ic_launcher_background)
+                val imageBytes = CamaraUtils.base64ToByteArray(fotoLimpia)
+                if (imageBytes != null) {
+                    imgFoto.load(imageBytes) {
+                        crossfade(true)
+                        placeholder(R.drawable.ic_pulso)
                     }
-                } catch (e: Exception) {
-                    imgFoto.setImageResource(R.drawable.ic_launcher_background)
+                } else {
+                    imgFoto.setImageResource(android.R.drawable.ic_menu_camera)
                 }
             }
         } else {
-            imgFoto.setImageResource(R.drawable.ic_launcher_background)
+            imgFoto.setImageResource(android.R.drawable.ic_menu_camera)
         }
 
+        // --- CARGA DE API ---
         if (ValidarConexionWAN.isOnline(this) && !esLocal) {
-            txEstado.text = "Cargando info..."
+            txEspecie.text = "Cargando..."
+            txHabitat.text = "Cargando..."
+            txEstado.text = "Cargando..."
+            txArea.text = "Cargando..."
+
             lifecycleScope.launch {
                 runCatching {
-                    if(animalEspecieId != 0L) VeterinariaRepository.fetchEspecieById(animalEspecieId).onSuccess { txEspecie.text = "Especie: ${it.nombre_comun}" }
-                    if(animalHabitatId != 0L) VeterinariaRepository.fetchHabitatById(animalHabitatId).onSuccess { txHabitat.text = "Hábitat: ${it.nombre}" }
-                    if(animalEstadoId != 0L) VeterinariaRepository.fetchEstadoById(animalEstadoId).onSuccess { txEstado.text = "Estado: ${it.estado}" }
-                    if(animalAreaId != 0L) VeterinariaRepository.fetchAreaById(animalAreaId).onSuccess { txArea.text = "Área: ${it.nombre}" }
+                    if(animalEspecieId != 0L) VeterinariaRepository.fetchEspecieById(animalEspecieId).onSuccess { txEspecie.text = it.nombre_comun }
+                    if(animalHabitatId != 0L) VeterinariaRepository.fetchHabitatById(animalHabitatId).onSuccess { txHabitat.text = it.nombre }
+                    if(animalEstadoId != 0L) VeterinariaRepository.fetchEstadoById(animalEstadoId).onSuccess { txEstado.text = it.estado }
+                    if(animalAreaId != 0L) VeterinariaRepository.fetchAreaById(animalAreaId).onSuccess { txArea.text = it.nombre }
                 }
             }
         } else {
-            txEstado.text = "Estado ID: $animalEstadoId"
+            txEspecie.text = "ID: $animalEspecieId"
+            txHabitat.text = "ID: $animalHabitatId"
+            txEstado.text = "ID: $animalEstadoId"
+            txArea.text = "ID: $animalAreaId"
         }
 
+        // --- BOTONES INTELIGENTES ---
         if (esLocal) {
             btnEditar.visibility = View.GONE
             btnEliminar.visibility = View.GONE
         } else {
+            // 1. Configuración visual del botón según estado
+            if (esActivo) {
+                btnEliminar.text = "Desactivar"
+                btnEliminar.setBackgroundColor(Color.parseColor("#B00020")) // Rojo
+                btnEliminar.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_close_clear_cancel, 0, 0, 0)
+            } else {
+                btnEliminar.text = "Reactivar"
+                btnEliminar.setBackgroundColor(Color.parseColor("#006400")) // Verde
+                btnEliminar.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_add, 0, 0, 0)
+            }
+
+            // 2. Acción al hacer click
             btnEliminar.setOnClickListener {
+                val nuevoEstado = !esActivo // Invertimos el estado
+                val accionTexto = if (nuevoEstado) "Reactivar" else "Desactivar"
+
                 AlertDialog.Builder(this)
-                    .setTitle("Eliminar")
-                    .setMessage("¿Eliminar a $animalNombre?")
+                    .setTitle("$accionTexto Animal")
+                    .setMessage("¿Estás seguro de $accionTexto a $animalNombre?")
                     .setPositiveButton("Sí") { _, _ ->
                         lifecycleScope.launch {
-                            VeterinariaRepository.deleteAnimal(animalId).onSuccess {
-                                Toast.makeText(this@DetalleAnimalActivity, "Eliminado", Toast.LENGTH_SHORT).show()
+                            // Llamamos a la función de cambiar estado del repositorio
+                            VeterinariaRepository.cambiarEstado(animalId, nuevoEstado).onSuccess {
+                                Toast.makeText(this@DetalleAnimalActivity, "Estado cambiado!", Toast.LENGTH_SHORT).show()
                                 finish()
+                            }.onFailure {
+                                Toast.makeText(this@DetalleAnimalActivity, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
-                    .setNegativeButton("No", null).show()
+                    .setNegativeButton("Cancelar", null).show()
             }
 
             btnEditar.setOnClickListener {
@@ -131,6 +176,7 @@ class DetalleAnimalActivity : AppCompatActivity() {
                     putExtra("HABITAT_ID", animalHabitatId)
                     putExtra("ESTADO_ID", animalEstadoId)
                     putExtra("AREA_ID", animalAreaId)
+                    putExtra("ACTIVO", esActivo)
                 }
                 startActivity(intentEditar)
                 finish()

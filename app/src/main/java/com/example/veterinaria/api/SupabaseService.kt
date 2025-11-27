@@ -9,7 +9,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
-
+// 1. AGREGAMOS EL CAMPO 'ACTIVO' AL INSERT/UPDATE
 data class AnimalInsertRequest(
     val nombre: String,
     val fecha_nacimiento: String, // formato "YYYY-MM-DD"
@@ -18,14 +18,18 @@ data class AnimalInsertRequest(
     val id_habitat: Long = 1,
     val id_estado_salud: Long = 1,
     val id_area: Long = 1,
-    val foto_url: String? = null
+    val foto_url: String? = null,
+    val activo: Boolean = true // <--- NUEVO CAMPO (Por defecto true)
 )
 
+// Data class auxiliar pequeña para el borrado lógico
+data class EstadoRequest(val activo: Boolean)
 
 interface SupabaseService {
+
     @GET("animal")
     suspend fun getAnimales(
-        @Query("select") select: String = "id_animal,nombre,fecha_nacimiento,foto_url,id_area,id_sexo,id_especie,id_habitat,id_estado_salud",
+        @Query("select") select: String = "id_animal,nombre,fecha_nacimiento,foto_url,id_area,id_sexo,id_especie,id_habitat,id_estado_salud,activo",
         @Header("Range") range: String = "0-99"
     ): List<Animal>
 
@@ -35,69 +39,59 @@ interface SupabaseService {
         @Header("Prefer") prefer: String = "return=representation"
     ): List<Animal>
 
+    // --- CORRECCIÓN EN CONTADORES (Filtrar solo activos) ---
 
-    @GET("animal")
+    @GET("animal?activo=eq.true")
     suspend fun getTotalAnimalesCount(
         @Header("Prefer") prefer: String = "count=exact",
-        @Header("Range") range: String = "0-0" // Solo queremos el conteo, no filas
+        @Header("Range") range: String = "0-0"
     ): Response<Unit>
 
     /**
-     * pide el conteo de animales críticos (id_estado_salud = 4)
+     * pide el conteo de animales críticos (id_estado_salud = 4) Y activos
      */
-    @GET("animal?id_estado_salud=eq.4") // filtro de Supabase
+    @GET("animal?id_estado_salud=eq.4&activo=eq.true")
     suspend fun getCriticosAnimalesCount(
         @Header("Prefer") prefer: String = "count=exact",
         @Header("Range") range: String = "0-0"
     ): Response<Unit>
 
-    //PARA HACER EL LOGIN DEL VETERINARIO
+    // ------------------------------------------------------
+
+    // PARA HACER EL LOGIN DEL VETERINARIO
     @GET("veterinario")
     suspend fun loginVeterinario(
-        @Query("email") email: String,     // "c.gomez@zoovet.cl"
-        @Query("password") password: String, // "vet1"
-
-        // pedimos solo los datos que coinciden con el data class 'veterinario'
+        @Query("email") email: String,
+        @Query("password") password: String,
         @Query("select") select: String = "id_veterinario,nombre,apellido_p,email"
     ): List<Veterinario>
-    // devuelve una lista
-    // 1 si el login es exitoso
-    // vacia (0) si el login es incorrecto
 
     @GET("sexo")
     suspend fun getSexos(
         @Query("select") select: String = "id_sexo,descripcion"
     ): List<Sexo>
 
-
-
     @GET("especie")
     suspend fun getEspecies(
         @Query("select") select: String = "id_especie,nombre_comun"
     ): List<Especie>
-
-
 
     @GET("habitat")
     suspend fun getHabitats(
         @Query("select") select: String = "id_habitat,nombre"
     ): List<Habitat>
 
-
-
     @GET("estado_salud")
     suspend fun getEstadosSalud(
         @Query("select") select: String = "id_estado_salud,estado"
     ): List<EstadoSalud>
-
-
 
     @GET("area_animal")
     suspend fun getAreas(
         @Query("select") select: String = "id_area,nombre"
     ): List<Area>
 
-    //PARA EL LISTADO DE ANIMALES DEL INICIO DEL VET
+    // PARA EL LISTADO DE ANIMALES DEL INICIO DEL VET
     @GET("vista_animales_listado")
     suspend fun getAnimalesDashboard(
         @Query("limit") limit: Int = 3
@@ -106,15 +100,13 @@ interface SupabaseService {
     @GET("vista_animales_listado")
     suspend fun getAllAnimalesListado(): List<AnimalListado>
 
-
     /**
-     * bbtiene TODAS las alertas para la pantalla de alertas
+     * obtiene TODAS las alertas para la pantalla de alertas
      * ordenadas por fecha y hora (más nuevas primero)
      */
     @GET("alerta")
     suspend fun getAlertas(
         @Query("select") select: String = "titulo,descripcion,fecha,hora,tipo_alerta:tipo_alerta(id_tipo_alerta,nombre_tipo),area:area_animal(id_area,nombre)",
-        // ordena por fecha descendente, y luego por hora descendente
         @Query("order") order: String = "fecha.desc,hora.desc"
     ): List<AlertaUI>
 
@@ -125,27 +117,16 @@ interface SupabaseService {
     @GET("cita")
     suspend fun getCitasPorRango(
         @Query("select") select: String = "id_cita,fecha,hora,animal:animal(id_animal,nombre),tipo_cita:tipo_cita(id_tipo_cita,nombre),veterinario:veterinario(id_veterinario,nombre,apellido_p,email)",
-
-        // filtro de fecha "mayor o igual que"
-        @Query("fecha") gte: String, // "gte.2025-05-01"
-
-        // filtro de fecha "menor o igual que"
-        @Query("fecha") lte: String, // "lte.2026-05-01"
-
-        // prdena por fecha y hora
+        @Query("fecha") gte: String,
+        @Query("fecha") lte: String,
         @Query("order") order: String = "fecha.asc,hora.asc"
-
     ): List<CitaUI>
 
     @POST("cita")
     suspend fun insertCita(
         @Body request: InsertarCita,
-        // pedimos que nos devuelva el objeto creado
         @Header("Prefer") prefer: String = "return=representation",
-
-        // le dice a supabase que la respuesta si incluya los joins
         @Query("select") select: String = "id_cita,fecha,hora,animal:animal(id_animal,nombre),tipo_cita:tipo_cita(id_tipo_cita,nombre),veterinario:veterinario(id_veterinario,nombre,apellido_p,email)"
-
     ): List<CitaUI>
 
     @GET("tipo_cita")
@@ -177,18 +158,18 @@ interface SupabaseService {
         @Query("select") select: String = "id_area,nombre"
     ): List<Area>
 
-    @DELETE("animal")
-    suspend fun deleteAnimal(
-        @Query("id_animal") idQuery: String // Se envía como "eq.ID"
-    ): retrofit2.Response<Unit>
+
+    @PATCH("animal")
+    suspend fun cambiarEstadoAnimal( // Antes se llamaba softDeleteAnimal
+        @Query("id_animal") idQuery: String,
+        @Body body: EstadoRequest // Recibe { "activo": true/false }
+    ): Response<Unit>
 
     // EDITAR
     @PATCH("animal")
     suspend fun updateAnimal(
         @Query("id_animal") idQuery: String,
         @Body request: AnimalInsertRequest,
-        @Header("Prefer") prefer: String = "return=representation" // <--- ¡ESTA LÍNEA FALTABA!
+        @Header("Prefer") prefer: String = "return=representation"
     ): List<Animal>
 }
-
-

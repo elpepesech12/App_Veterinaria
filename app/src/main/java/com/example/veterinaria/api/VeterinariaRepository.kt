@@ -243,14 +243,19 @@ object VeterinariaRepository {
         } catch (e: Exception) { Result.failure(e) }
     }
 
-    suspend fun deleteAnimal(id: Long): Result<Unit> = withContext(Dispatchers.IO) {
+    suspend fun cambiarEstado(id: Long, nuevoEstado: Boolean): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val query = "eq.$id"
-            val response = SupabaseClient.service.deleteAnimal(query)
+            // Enviamos el estado que nos piden (true o false)
+            val body = EstadoRequest(activo = nuevoEstado)
+
+            // Llamamos a la función renombrada en el Service
+            val response = SupabaseClient.service.cambiarEstadoAnimal(query, body)
+
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("Error al eliminar: ${response.code()}"))
+                Result.failure(Exception("Error al cambiar estado: ${response.code()}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

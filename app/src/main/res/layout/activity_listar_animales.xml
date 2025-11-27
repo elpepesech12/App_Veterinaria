@@ -6,7 +6,7 @@
     android:id="@+id/main_listar_animales"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2E7D32"
+    android:background="#00695C"
     tools:context=".ListarAnimalesActivity">
     <LinearLayout
         android:id="@+id/header_container"
@@ -94,7 +94,7 @@
         android:layout_height="56dp"
         android:text="Volver al Menú"
         android:textColor="@color/white"
-        android:backgroundTint="#1B5E20"
+        android:backgroundTint="#00695C"
         app:icon="@drawable/ic_arrow_back"
         app:iconTint="@color/white"
         app:cornerRadius="28dp"

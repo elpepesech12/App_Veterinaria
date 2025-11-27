@@ -54,7 +54,10 @@ class ListarAnimalesActivity : AppCompatActivity() {
                 intent.putExtra("ANIMAL_ESTADO", item.idEstadoSalud)
                 intent.putExtra("ANIMAL_AREA", item.idArea)
                 intent.putExtra("ES_LOCAL", false)
-                intent.putExtra("ANIMAL_FOTO", item.fotoUrl) // Pasamos la foto (link o base64)
+                intent.putExtra("ANIMAL_FOTO", item.fotoUrl)
+
+                // --- AGREGADO: Pasar el estado activo ---
+                intent.putExtra("ANIMAL_ACTIVO", item.activo)
 
                 startActivity(intent)
 
@@ -69,6 +72,9 @@ class ListarAnimalesActivity : AppCompatActivity() {
                 intent.putExtra("ANIMAL_AREA", item.idArea.toLong())
                 intent.putExtra("ES_LOCAL", true)
                 intent.putExtra("ANIMAL_FOTO", item.fotoUrl)
+
+                // En local asumimos true si no tienes el campo en la BD interna
+                intent.putExtra("ANIMAL_ACTIVO", true)
 
                 startActivity(intent)
             } else {
@@ -89,7 +95,6 @@ class ListarAnimalesActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Recargamos la lista al volver (por si borramos o editamos un animal)
         val lvAnimales: ListView = findViewById(R.id.lv_animales_admin)
         cargarDatos(lvAnimales)
     }
