@@ -148,7 +148,6 @@ object VeterinariaRepository {
 
     suspend fun fetchAlertas(): Result<List<AlertaUI>> = withContext(Dispatchers.IO) {
         try {
-            // llama a la nueva función del servicio
             Result.success(SupabaseClient.service.getAlertas())
         } catch (e: Exception) {
             Result.failure(e)
@@ -157,11 +156,10 @@ object VeterinariaRepository {
 
 
     suspend fun fetchCitasPorRango(
-        fechaInicio: String, // "2025-05-01"
-        fechaFin: String     // "2026-05-01"
+        fechaInicio: String,
+        fechaFin: String
     ): Result<List<CitaUI>> = withContext(Dispatchers.IO) {
         try {
-            // gte. (mayor o igual) y lte. (menor o igual)
             val queryGte = "gte.$fechaInicio"
             val queryLte = "lte.$fechaFin"
 
@@ -246,10 +244,8 @@ object VeterinariaRepository {
     suspend fun cambiarEstado(id: Long, nuevoEstado: Boolean): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val query = "eq.$id"
-            // Enviamos el estado que nos piden (true o false)
             val body = EstadoRequest(activo = nuevoEstado)
 
-            // Llamamos a la función renombrada en el Service
             val response = SupabaseClient.service.cambiarEstadoAnimal(query, body)
 
             if (response.isSuccessful) {
@@ -262,7 +258,6 @@ object VeterinariaRepository {
         }
     }
 
-    // [NUEVO] Lógica para editar
     suspend fun updateAnimal(id: Long, datos: AnimalInsertRequest): Result<Animal> = withContext(Dispatchers.IO) {
         try {
             val query = "eq.$id"
@@ -292,7 +287,6 @@ object VeterinariaRepository {
         }
     }
 
-    // ... dentro del object VeterinariaRepository
 
     suspend fun fetchHistorialMedico(): Result<List<FichaMedicaLectura>> = withContext(Dispatchers.IO) {
         try {

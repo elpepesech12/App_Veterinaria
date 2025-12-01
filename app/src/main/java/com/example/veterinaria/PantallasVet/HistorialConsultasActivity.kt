@@ -35,18 +35,16 @@ class HistorialConsultasActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_historial_consultas)
 
-        // --- 1. Referencias UI ---
         val btnVolver: ImageButton = findViewById(R.id.btn_volver_historial)
         val btnPdf: ImageButton = findViewById(R.id.btn_exportar_pdf)
         val rvHistorial: RecyclerView = findViewById(R.id.rv_historial)
         val pbCargando: ProgressBar = findViewById(R.id.pb_historial)
 
-        // --- 2. Configurar RecyclerView ---
         adapter = HistorialAdapter(emptyList())
         rvHistorial.layoutManager = LinearLayoutManager(this)
         rvHistorial.adapter = adapter
 
-        // --- 3. Cargar Datos (API) ---
+        // --- Cargar Datos (API) ---
         lifecycleScope.launch {
             val resultado = VeterinariaRepository.fetchHistorialMedico()
 
@@ -60,7 +58,7 @@ class HistorialConsultasActivity : AppCompatActivity() {
             }
         }
 
-        // --- 4. Listeners (Botones) ---
+        // ---  (Botones) ---
         btnVolver.setOnClickListener {
             finish()
         }
@@ -73,8 +71,6 @@ class HistorialConsultasActivity : AppCompatActivity() {
             }
         }
 
-        // --- 5. Ajustes Visuales (Padding Sistema) ---
-        // Esto es importante para que el header verde no quede tapado por la barra de estado
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_historial)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -82,19 +78,16 @@ class HistorialConsultasActivity : AppCompatActivity() {
         }
     }
 
-    // --- MÉTODOS AUXILIARES ---
 
     private fun generarPDF(datos: List<FichaMedicaLectura>) {
         val pdfDocument = PdfDocument()
         val paint = Paint()
         val titlePaint = Paint()
 
-        // Configuración de página A4 estándar
         val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create()
         val page = pdfDocument.startPage(pageInfo)
         val canvas: Canvas = page.canvas
 
-        // Estilos de Texto
         titlePaint.textSize = 20f
         titlePaint.textAlign = Paint.Align.CENTER
         titlePaint.typeface = android.graphics.Typeface.DEFAULT_BOLD
@@ -102,36 +95,31 @@ class HistorialConsultasActivity : AppCompatActivity() {
         paint.textSize = 12f
         paint.color = Color.BLACK
 
-        // 1. Título del Documento
         canvas.drawText("Reporte de Consultas Veterinarias", 297f, 50f, titlePaint)
 
         var y = 100f
 
-        // 2. Cabecera de la Tabla
         paint.isFakeBoldText = true
         canvas.drawText("Fecha", 50f, y, paint)
         canvas.drawText("Animal", 150f, y, paint)
         canvas.drawText("Diagnóstico", 280f, y, paint)
         canvas.drawText("Veterinario", 480f, y, paint)
 
-        // Línea separadora
         paint.isFakeBoldText = false
         y += 20f
         canvas.drawLine(40f, y - 15, 550f, y - 15, paint)
 
-        // 3. Contenido (Filas)
         for (item in datos) {
-            // Evitar escribir fuera de la página
             if (y > 800) break
 
             // Columna Fecha
             canvas.drawText(item.fecha_realizada, 50f, y, paint)
 
-            // Columna Animal (Cortar texto si es largo)
+            // Columna Animal
             val nombreAnimal = item.animal?.nombre ?: "-"
             canvas.drawText(nombreAnimal.take(12), 150f, y, paint)
 
-            // Columna Diagnóstico (Limpiar saltos de línea y cortar)
+            // Columna Diagnóstico
             val diag = item.diagnostico_general.replace("\n", " ")
             canvas.drawText(diag.take(30) + "...", 280f, y, paint)
 
@@ -139,12 +127,12 @@ class HistorialConsultasActivity : AppCompatActivity() {
             val nomVet = item.veterinario?.nombre ?: "-"
             canvas.drawText(nomVet.take(10), 480f, y, paint)
 
-            y += 25f // Salto de línea para la siguiente fila
+            y += 25f // saltar de pagina
         }
 
         pdfDocument.finishPage(page)
 
-        // 4. Guardar Archivo
+        // 4. Guardar el archivo
         val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "ReporteVeterinaria.pdf")
 
         try {

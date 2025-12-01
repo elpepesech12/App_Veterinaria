@@ -23,9 +23,8 @@ data class Animal(
     @Json(name = "id_estado_salud")
     val idEstadoSalud: Long,
 
-    // --- NUEVO CAMPO ---
     @Json(name = "activo")
-    val activo: Boolean = true // Por defecto true para evitar nulos antiguos
+    val activo: Boolean = true
 ) {
     override fun toString(): String {
         return "$nombre (Nac: $fechaNacimiento)"

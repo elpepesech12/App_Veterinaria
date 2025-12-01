@@ -55,8 +55,7 @@ class VerAnimales : Fragment() {
         }
 
         btnVolver.setOnClickListener {
-            // 'parentFragmentManager' es el gestor de fragments
-            // 'popBackStack()' es la acción de "presionar atrás"
+
             parentFragmentManager.popBackStack()
         }
 

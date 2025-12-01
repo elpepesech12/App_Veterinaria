@@ -55,8 +55,8 @@ class AgregarCita : Fragment() {
 
         var animalSeleccionadoId: Long? = null
         var tipoCitaSeleccionadoId: Long? = null
-        var fechaSeleccionadaApi: String = "" // "YYYY-MM-DD"
-        var horaSeleccionadaApi: String = "" // "HH:MM:SS"
+        var fechaSeleccionadaApi: String = ""
+        var horaSeleccionadaApi: String = ""
 
         fun cargarDatosSpinners() {
             progressBar.isVisible = true

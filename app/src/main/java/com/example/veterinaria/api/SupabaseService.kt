@@ -117,23 +117,16 @@ interface SupabaseService {
     @GET("vista_animales_listado")
     suspend fun getAllAnimalesListado(): List<AnimalListado>
 
-    /**
-     * obtiene TODAS las alertas para la pantalla de alertas
-     * ordenadas por fecha y hora (más nuevas primero)
-     */
+
     @GET("alerta")
     suspend fun getAlertas(
         @Query("select") select: String = "titulo,descripcion,fecha,hora,tipo_alerta:tipo_alerta(id_tipo_alerta,nombre_tipo),area:area_animal(id_area,nombre)",
         @Query("order") order: String = "fecha.desc,hora.desc"
     ): List<AlertaUI>
 
-    /**
-     * obtiene las citas para el calendario
-     * pide todas las citas entre una fecha de inicio y fin
-     */
+
     @GET("cita")
     suspend fun getCitasPorRango(
-        // Pedimos id, nombre, activo y foto_url dentro del objeto animal
         @Query("select") select: String = "id_cita,fecha,hora,animal:animal(id_animal,nombre,activo,foto_url),tipo_cita:tipo_cita(id_tipo_cita,nombre),veterinario:veterinario(id_veterinario,nombre,apellido_p,email)",
 
         @Query("fecha") gte: String,
@@ -179,9 +172,9 @@ interface SupabaseService {
 
 
     @PATCH("animal")
-    suspend fun cambiarEstadoAnimal( // Antes se llamaba softDeleteAnimal
+    suspend fun cambiarEstadoAnimal(
         @Query("id_animal") idQuery: String,
-        @Body body: EstadoRequest // Recibe { "activo": true/false }
+        @Body body: EstadoRequest
     ): Response<Unit>
 
     // EDITAR
@@ -200,7 +193,6 @@ interface SupabaseService {
 
     @GET("ficha_medica")
     suspend fun getHistorialMedico(
-        // CORRECCIÓN: Agregamos 'id_animal' dentro del paréntesis de animal(...)
         @Query("select") select: String = "id_ficha_m,fecha_realizada,diagnostico_general,animal:animal(id_animal,nombre),veterinario:veterinario(nombre,apellido_p)",
         @Query("order") order: String = "fecha_realizada.desc"
     ): List<FichaMedicaLectura>

@@ -39,14 +39,12 @@ class AlertasVet : Fragment() {
         val listaMaestraDeAlertas = mutableListOf<AlertaUI>()
 
         fun setupRecyclerView() {
-            // inicializa el adapter con una lista vacía
             adapterAlertas = AlertasAdapter(emptyList())
             recyclerAlertas.layoutManager = LinearLayoutManager(requireContext())
             recyclerAlertas.adapter = adapterAlertas
         }
 
         fun cargarDatosDeAlertas() {
-            // muestra la barra de progreso
             progressBar.visibility = View.VISIBLE
             recyclerAlertas.visibility = View.GONE
 
@@ -58,12 +56,10 @@ class AlertasVet : Fragment() {
                         val alertas = resultado.getOrNull()
                         if (!alertas.isNullOrEmpty()) {
 
-                            // guardamos la lista completa en nuestra variable maestra
                             listaMaestraDeAlertas.clear()
                             listaMaestraDeAlertas.addAll(alertas)
 
                             toggleGroup.check(R.id.btn_filtro_todas)
-                            // actualizamos el adapter con la lista completa
                             adapterAlertas?.updateData(listaMaestraDeAlertas)
 
                         } else {
@@ -103,7 +99,7 @@ class AlertasVet : Fragment() {
 
                         R.id.btn_filtro_info -> {
                             listaMaestraDeAlertas.filter {
-                                // Filtramos por "Informativo" O por "Exitosa" (como en tu adapter)
+                                // Filtramos por "Informativo" O por "Exitosa"
                                 it.tipoAlerta.nombre.equals("Informativo", ignoreCase = true) ||
                                         it.titulo.contains("Exitosa", ignoreCase = true)
                             }

@@ -10,8 +10,6 @@ data class AnimalListado(
     @Json(name = "especie") val especie: String,
     @Json(name = "area") val area: String,
     @Json(name = "estado_salud") val estado: String,
-
-    // --- NUEVO CAMPO ---
     @Json(name = "activo")
     val activo: Boolean = true
 )
