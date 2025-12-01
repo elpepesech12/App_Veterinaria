@@ -25,6 +25,23 @@ data class AnimalInsertRequest(
 // Data class auxiliar pequeña para el borrado lógico
 data class EstadoRequest(val activo: Boolean)
 
+data class FichaMedicaInsert(
+    val fecha_realizada: String,    // "YYYY-MM-DD"
+    val diagnostico_general: String,
+    val id_animal: Long,
+    val id_veterinario: Long
+)
+
+data class FichaMedicaLectura(
+    val id_ficha_m: Long,
+    val fecha_realizada: String,
+    val diagnostico_general: String,
+    val animal: AnimalSimple?,       // Relación
+    val veterinario: VeterinarioSimple? // Relación
+)
+
+data class VeterinarioSimple(val nombre: String, val apellido_p: String)
+
 interface SupabaseService {
 
     @GET("animal")
@@ -116,7 +133,9 @@ interface SupabaseService {
      */
     @GET("cita")
     suspend fun getCitasPorRango(
-        @Query("select") select: String = "id_cita,fecha,hora,animal:animal(id_animal,nombre),tipo_cita:tipo_cita(id_tipo_cita,nombre),veterinario:veterinario(id_veterinario,nombre,apellido_p,email)",
+        // Pedimos id, nombre, activo y foto_url dentro del objeto animal
+        @Query("select") select: String = "id_cita,fecha,hora,animal:animal(id_animal,nombre,activo,foto_url),tipo_cita:tipo_cita(id_tipo_cita,nombre),veterinario:veterinario(id_veterinario,nombre,apellido_p,email)",
+
         @Query("fecha") gte: String,
         @Query("fecha") lte: String,
         @Query("order") order: String = "fecha.asc,hora.asc"
@@ -172,4 +191,17 @@ interface SupabaseService {
         @Body request: AnimalInsertRequest,
         @Header("Prefer") prefer: String = "return=representation"
     ): List<Animal>
+
+    @POST("ficha_medica")
+    suspend fun crearFichaMedica(
+        @Body ficha: FichaMedicaInsert,
+        @Header("Prefer") prefer: String = "return=minimal"
+    ): Response<Unit>
+
+    @GET("ficha_medica")
+    suspend fun getHistorialMedico(
+        // CORRECCIÓN: Agregamos 'id_animal' dentro del paréntesis de animal(...)
+        @Query("select") select: String = "id_ficha_m,fecha_realizada,diagnostico_general,animal:animal(id_animal,nombre),veterinario:veterinario(nombre,apellido_p)",
+        @Query("order") order: String = "fecha_realizada.desc"
+    ): List<FichaMedicaLectura>
 }

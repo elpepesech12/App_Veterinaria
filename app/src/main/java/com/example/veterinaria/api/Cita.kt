@@ -5,7 +5,9 @@ import com.squareup.moshi.Json
 // molde para el Animal
 data class AnimalSimple(
     @Json(name = "id_animal") val id: Long,
-    @Json(name = "nombre") val nombre: String
+    @Json(name = "nombre") val nombre: String,
+    @Json(name = "foto_url") val fotoUrl: String? = null, // Agregado
+    @Json(name = "activo") val activo: Boolean = true     // Agregado
 )
 
 // molde para el tipo de cita

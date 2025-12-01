@@ -1,106 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F9F9"
-    tools:context=".PantallasVet.RegistrosVet">
+    android:id="@+id/main_historial"
+    android:background="#F5F5F5"
+    android:fillViewport="true">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/search_view_registros"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/bg_buscador"
-        app:iconifiedByDefault="false"
-        app:queryHint="Buscar animales, registros..."
-        app:searchIcon="@drawable/ic_lupa"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tv_titulo_registros"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Registros Médicos"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@id/search_view_registros"
-        app:layout_constraintTop_toBottomOf="@id/search_view_registros" /> <ImageButton
-    android:id="@+id/btn_descargar_todo"
-    android:layout_width="48dp"
-    android:layout_height="48dp"
-    android:src="@drawable/ic_descargar"
-    android:background="?attr/selectableItemBackgroundBorderless"
-    android:contentDescription="Descargar todo"
-    app:layout_constraintEnd_toEndOf="@id/search_view_registros"
-    app:layout_constraintTop_toTopOf="@id/tv_titulo_registros"
-    app:layout_constraintBottom_toBottomOf="@id/tv_titulo_registros" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="8dp"
+            android:text="Nueva Consulta"
+            android:textColor="#00695C"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/menu_filtro_registros"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:label="Tipo"
-        app:layout_constraintTop_toBottomOf="@id/tv_titulo_registros"
-        app:layout_constraintStart_toStartOf="@id/tv_titulo_registros"
-        app:layout_constraintEnd_toStartOf="@id/btn_filtros">
-
-        <AutoCompleteTextView
-            android:id="@+id/autocomplete_filtro_registros"
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Material3.CardView.Elevated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Todos los registros"
-            android:inputType="none" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_filtros"
-        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="Filtros"
-        android:textColor="@color/black"
-        app:icon="@drawable/ic_filtro"
-        app:iconTint="@color/black"
-        app:layout_constraintTop_toTopOf="@id/menu_filtro_registros"
-        app:layout_constraintBottom_toBottomOf="@id/menu_filtro_registros"
-        app:layout_constraintEnd_toEndOf="@id/btn_descargar_todo" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_registros_medicos"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:clipToPadding="false"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="88dp"
-        app:layout_constraintTop_toBottomOf="@id/menu_filtro_registros"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_registro_medico"
-        tools:itemCount="3" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Selecciona el Paciente"
+                    android:textColor="#00695C"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_agregar_registro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_add"
-        android:contentDescription="Agregar nuevo registro"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/abc_popup_background_mtrl_mult"
+                    android:backgroundTint="#F0F0F0">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                    <Spinner
+                        android:id="@+id/sp_registro_animal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="8dp" />
+                </FrameLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:hint="Fecha de Consulta"
+                    app:boxStrokeColor="#00695C"
+                    app:hintTextColor="#00695C"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@android:drawable/ic_menu_my_calendar"
+                    app:endIconTint="#00695C">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ed_registro_fecha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:inputType="date" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:hint="Diagnóstico y Observaciones"
+                    app:boxStrokeColor="#00695C"
+                    app:hintTextColor="#00695C">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ed_registro_diagnostico"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|start"
+                        android:inputType="textMultiLine|textCapSentences"
+                        android:minLines="5" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btn_guardar_registro"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:backgroundTint="#00695C"
+                    android:text="Guardar Historial"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <Button
+            android:id="@+id/btn_ver_historial_completo"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
+            android:text="Ver Historial Completo y Exportar"
+            android:textColor="#00695C"
+            app:strokeColor="#00695C"
+            app:strokeWidth="1dp" />
+
+    </LinearLayout>
+</ScrollView>

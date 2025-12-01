@@ -48,6 +48,9 @@
             android:name=".InicioVet"
             android:exported="false" />
         <activity
+            android:name=".HistorialConsultasActivity"
+            android:exported="false"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

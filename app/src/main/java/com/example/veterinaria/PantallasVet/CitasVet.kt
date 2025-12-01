@@ -66,8 +66,13 @@ class CitasVet : Fragment() {
         val btnMesSiguiente: ImageButton = view.findViewById(R.id.btn_mes_siguiente)
         val btnMesAnterior: ImageButton = view.findViewById(R.id.btn_mes_anterior)
 
+        // --- CORRECCIÓN DE FECHAS (Para evitar crash en meses cortos) ---
         val fechaInicio = hoy.minusMonths(6).withDayOfMonth(1).toString()
-        val fechaFin = hoy.plusMonths(6).withDayOfMonth(31).toString()
+
+        // Calculamos el mes futuro y pedimos SU último día (28, 30 o 31)
+        val mesFuturo = hoy.plusMonths(6)
+        val fechaFin = mesFuturo.withDayOfMonth(mesFuturo.lengthOfMonth()).toString()
+        // ---------------------------------------------------------------
 
         val fabAgregarCita: FloatingActionButton = view.findViewById(R.id.fab_agregar_cita)
 
@@ -87,7 +92,7 @@ class CitasVet : Fragment() {
             recyclerCitas.isVisible = citasDelDia.isNotEmpty()
         }
 
-        // nunción para manejar la selección de un día
+        // función para manejar la selección de un día
         fun seleccionarDia(fecha: LocalDate) {
             val fechaAntigua = diaSeleccionado
             diaSeleccionado = fecha
@@ -223,7 +228,6 @@ class CitasVet : Fragment() {
 
         fabAgregarCita.setOnClickListener {
             parentFragmentManager.beginTransaction()
-
                 .replace(R.id.fragment_container, AgregarCita())
                 .addToBackStack(null) // permite volver atrás
                 .commit()
@@ -232,7 +236,5 @@ class CitasVet : Fragment() {
         setupRecyclerCitas()
         setupCalendario()
         cargarDatosDeCitas(fechaInicio, fechaFin)
-
     }
-
 }

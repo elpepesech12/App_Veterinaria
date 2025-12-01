@@ -276,4 +276,30 @@ object VeterinariaRepository {
             Result.failure(e)
         }
     }
+
+    suspend fun crearFicha(fecha: String, diagnostico: String, idAnimal: Long, idVet: Long): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val request = FichaMedicaInsert(fecha, diagnostico, idAnimal, idVet)
+            val response = SupabaseClient.service.crearFichaMedica(request)
+
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Error al guardar ficha: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // ... dentro del object VeterinariaRepository
+
+    suspend fun fetchHistorialMedico(): Result<List<FichaMedicaLectura>> = withContext(Dispatchers.IO) {
+        try {
+            val respuesta = SupabaseClient.service.getHistorialMedico()
+            Result.success(respuesta)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
